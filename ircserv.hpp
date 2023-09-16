@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:38 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/08 18:09:23 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/16 10:41:27 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ class ircserv
         void    add_client(int client_socket);
         void    broadcast_message(int sender, std::string message);
         void    remove_client(int client_socket);
-        int     get_socket() const {return (_socket);}
+        int     get_socket() const ;
     
     private:
         int     _port;

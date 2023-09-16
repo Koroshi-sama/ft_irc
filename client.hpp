@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 15:06:39 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/08 17:05:21 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/16 11:07:51 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "ircserv.hpp"
 #include "includes.hpp"
 
+// Client class: Each client has a nickname, username and a list of channels he is in.
 
 class Client {
     private:

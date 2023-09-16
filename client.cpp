@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:29:30 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/08 18:56:00 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/16 11:08:47 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 int    ircserv::accept_client() {
     sockaddr_in client;
     socklen_t clientSize = sizeof(client);
+    // Accept connection from an incoming client. The accept() system call causes the process to block until a client connects to the server.
     int clientSocket = accept(_socket, (struct sockaddr*)&client, &clientSize);
     if (clientSocket == -1)
     {
         std::cerr << "Error: socket accept failed" << std::endl;
-        // close(_socket);
         return (-1);
     }
     if (_clients[clientSocket] == NULL) {
@@ -31,14 +31,14 @@ int    ircserv::accept_client() {
 
 void    ircserv::add_client(int clientSocket) {
     std::string welcome_name = "Welcome to the server!\nPlease enter your nickname \nand username using this commands:\nNICK <nickname>\nUSER <username>\n";
-    std::string welcome = GREEN + welcome_name + RESET;  
+    std::string welcome = GREEN + welcome_name + RESET;
+    // Send welcome message to the connected client. The send() system call is similar to write() but it is used for sockets instead of file descriptors.
     send(clientSocket, welcome.c_str(), welcome.size() + 1, 0);
     _clients[clientSocket] = new Client();
 }
 
 void    ircserv::broadcast_message(int sender, std::string message) {
     if (_clients[sender]) {
-        // std::cout << "[" << message << "]" << std::endl;
         std::cout << "Client " << sender << " sent: " << message << std::endl;
         std::vector<std::string> tokens = split(message, ' ');
         std::cout << tokens[0] << std::endl;
@@ -69,6 +69,7 @@ void    ircserv::broadcast_message(int sender, std::string message) {
         //     }
         // }
         else {
+            // Send message to all clients except the sender. Checks if the sender has a nickname, if not, send the sender's socket number.
             for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++) {
                 if (it->first != sender) {
                     if (_clients[sender]->get_nickname() != "") {
@@ -85,7 +86,6 @@ void    ircserv::broadcast_message(int sender, std::string message) {
 
 void    ircserv::remove_client(int client_socket) {
     if (_clients[client_socket]) {
-        // std::cout << "Client " << client_socket << " disconnected" << std::endl;
         delete _clients[client_socket];
         _clients.erase(client_socket);
     }

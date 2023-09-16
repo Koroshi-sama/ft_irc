@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:29:37 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/08 17:10:07 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/16 09:04:14 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,14 @@ std::string to_string(int n) {
 std::string strtrim(std::string& str) {
     std::string trimmed = str;
 
-    // Find the first non-whitespace character from the beginning
     size_t start = trimmed.find_first_not_of(" \t\n\r");
 
     if (start != std::string::npos) {
-        // Find the first non-whitespace character from the end
         size_t end = trimmed.find_last_not_of(" \t\n\r");
-
-        // Extract the trimmed substring
         trimmed = trimmed.substr(start, end - start + 1);
     } else {
-        // The string contains only whitespace, so return an empty string
         trimmed.clear();
     }
-
     return trimmed;
 }
 
