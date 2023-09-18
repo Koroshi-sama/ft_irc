@@ -6,7 +6,11 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:38 by aerrazik          #+#    #+#             */
+<<<<<<< HEAD:server/ircserv.hpp
 /*   Updated: 2023/09/19 09:16:14 by aerrazik         ###   ########.fr       */
+=======
+/*   Updated: 2023/09/18 11:44:14 by atouba           ###   ########.fr       */
+>>>>>>> 89f4458 (feature: join channel, broadcast message (code is only prototyped and totally untested)):ircserv.hpp
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +47,8 @@ class ircserv
         int     get_port() const ;
         std::string get_creation_time() const;
         void    sendNumericReply(int clientSocket, std::string replay);
+
+		std::string	attempt_joining_chan(int cl_socket, std::string req);
     
     private:
         int     _port;
@@ -50,6 +56,8 @@ class ircserv
         struct sockaddr_in _addr;
         std::string _password;
         std::string creation_time;
+        std::map<int, Client *> _clients;
+		std::map<std::string, Channel*> _channels;
 };
 
 #endif

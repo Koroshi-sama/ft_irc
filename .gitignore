@@ -1,1 +1,6 @@
 .nfs*
+
+test*
+ircserv
+
+.*swo

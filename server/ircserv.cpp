@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:34 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/19 09:19:08 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/19 11:06:48 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,3 +100,26 @@ void    ircserv::stop_server() {
         close(_socket);
     }
 }
+
+// should I really check is the channel name start with a '#', because in other servers, it seems, you can also join channels with only the name of the channel (without the '#')
+std::string	attempt_joining_chan(int cl_socket, std::string req) {
+	std::vector<std::string>	tokens;
+	tokens = split(req, ' ');
+	for (int i = 1; i < tokens.size(); i++) {
+		if (tokens[i][0] != '#')
+			return (error_msg);
+		if (_channels.find(tokens[i]) != _channels.end()) { // channel is found
+			// remove this test later
+			if (_clients.find(cl_socket) == _clients.end()) {  
+				std::cout << "Client socket not found! Wtf\n";
+				std::exit(11);
+			}
+			return _channels[tokens[i]].join(_clients[cl_socket]);
+		}
+		else {  // channel not found, create it
+			_channels.insert(std::pair<std::string, Channel*>(tokens[i], new Channel(tokens[i])));
+			return _channels[tokens[i]].join(_clients[cl_socket]);
+		}
+	}
+}
+
