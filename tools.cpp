@@ -6,11 +6,11 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:29:37 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/16 09:04:14 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/18 16:05:32 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "client.hpp"
+#include "client/client.hpp"
 #include "includes.hpp"
 
 

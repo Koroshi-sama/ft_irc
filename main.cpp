@@ -6,11 +6,12 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:32 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/16 11:02:39 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/19 10:34:39 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ircserv.hpp"
+#include "server/ircserv.hpp"
+#include "command/command.hpp"
 
 int main(int ac, char **av) {
     if (ac != 3) {
@@ -30,6 +31,8 @@ int main(int ac, char **av) {
         
         // While loop: Listen for incoming connections and handle them. The poll() function do the job of handling multiple clients at the same time.
         // Read about poll() or watch a video to understand how it works. "Events, Revents, POLLIN, ..."
+
+        Command command(&irc);
         
         while (true) {
             int pollCount = poll(fds, countClients + 1, -1);
@@ -48,7 +51,9 @@ int main(int ac, char **av) {
                 
             }
             for (int i = 1; i <= countClients; i++) {
+                std::cout << "---------" << countClients << std::endl;
                 if (fds[i].revents && POLLIN) {
+                    std::cout << "----> Entered if fds <----" << std::endl;
                     // Receive message from client: buffer that will contain the message, bytesReceived: number of bytes received, all this handled by recv() function.
                     char buffer[MAX_BUFFER];
                     memset(buffer, 0, sizeof(buffer));
@@ -59,7 +64,11 @@ int main(int ac, char **av) {
                     }
                     else if (strcmp(buffer, "QUIT\n") == 0 || bytesReceived == 0) {
                         // Remove client from the map and close the socket. Check client.cpp for remove_client() function.
+
+                        /**DEBUG MSG**/
                         std::cout << "Client " << fds[i].fd << " disconnected" << std::endl;
+                        /**DEBUG MSG**/
+
                         irc.remove_client(fds[i].fd);
                         close(fds[i].fd);
                         countClients--;
@@ -68,9 +77,14 @@ int main(int ac, char **av) {
                         }
                     }
                     else {
+                        
+                        /**DEBUG MSG**/
+                        std::cout << "--------------------------------------------------------------" << std::endl;
                         std::cout << "Received from client " << fds[i].fd << ": " << buffer << std::endl;
-                        // Send message to all clients. Check ircserv.cpp for broadcast_message() function.
-                        irc.broadcast_message(fds[i].fd, buffer);
+                        std::cout << "--------------------------------------------------------------" << std::endl;
+                        /**DEBUG MSG**/
+
+                        command.handle_commands(buffer, fds[i].fd);
                     }
                 }
             }

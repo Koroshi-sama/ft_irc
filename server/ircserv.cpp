@@ -6,13 +6,13 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:34 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/16 11:05:40 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/19 09:19:08 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ircserv.hpp"
 
-ircserv::ircserv(): _port(0), _socket(0), _password("") {}
+ircserv::ircserv(): _port(0), _socket(0), _addr(), _password("") {}
 
 ircserv::ircserv(int port, std::string password): _port(port), _socket(0), _password(password) {}
 
@@ -24,6 +24,7 @@ ircserv &ircserv::operator=(const ircserv &ircserv)
     {
         _port = ircserv._port;
         _socket = ircserv._socket;
+        _addr   = ircserv._addr;
         _password = ircserv._password;
     }
     return (*this);
@@ -33,6 +34,14 @@ ircserv::~ircserv() {}
 
 int     ircserv::get_socket() const {
     return (_socket);
+}
+
+int     ircserv::get_port() const {
+    return (_port);
+}
+
+std::string ircserv::get_creation_time() const {
+    return (creation_time);
 }
 
 bool    ircserv::start_server() {
@@ -76,7 +85,12 @@ bool    ircserv::start_server() {
         std::cerr << "Error: socket listen failed" << std::endl;
         return (false);
     }
-
+    
+    _addr = addr;
+    // store the time when the server started and be in this form  11:58:05 Sep 16 2023 
+    time_t now = time(0);
+    creation_time = ctime(&now);
+    std::cout << creation_time << std::endl;
     std::cout << "Server started on port " << _port << std::endl;
     return (true);
 }

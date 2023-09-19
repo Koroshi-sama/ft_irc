@@ -6,15 +6,15 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:38 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/16 10:41:27 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/19 09:16:14 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef IRCSERV_HPP
 #define IRCSERV_HPP
 
-#include "client.hpp"
-#include "includes.hpp"
+#include "../client/client.hpp"
+#include "../includes.hpp"
 
 #define MAX_HOST 1025
 #define MAX_SERV 32
@@ -26,6 +26,7 @@ class Client;
 class ircserv
 {
     public:
+        std::map<int, Client *> _clients;
         ircserv();
         ircserv(int port, std::string password);
         ircserv(const ircserv &ircserv);
@@ -39,12 +40,16 @@ class ircserv
         void    broadcast_message(int sender, std::string message);
         void    remove_client(int client_socket);
         int     get_socket() const ;
+        int     get_port() const ;
+        std::string get_creation_time() const;
+        void    sendNumericReply(int clientSocket, std::string replay);
     
     private:
         int     _port;
         int     _socket;
+        struct sockaddr_in _addr;
         std::string _password;
-        std::map<int, Client *> _clients;
+        std::string creation_time;
 };
 
 #endif
