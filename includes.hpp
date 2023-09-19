@@ -6,12 +6,21 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:31:40 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/08 17:12:15 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/19 19:13:43 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef INCLUDES_HPP
 #define INCLUDES_HPP
+
+// --------------------
+
+// #include "./channel/Channel.hpp"
+// #include "./command/command.hpp"
+// #include "./server/ircserv.hpp"
+// #include "./client/client.hpp"
+
+// ---------------
 
 #include <vector>
 #include <iostream>

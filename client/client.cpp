@@ -6,11 +6,12 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:29:30 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/19 10:30:15 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/19 19:16:26 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.hpp"
+#include "../server/ircserv.hpp"
 
 int    ircserv::accept_client() {
     sockaddr_in client;

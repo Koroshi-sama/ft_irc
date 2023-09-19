@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:14 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/19 10:30:51 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/19 19:18:41 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define COMMAND_HPP
 
 #include "../includes.hpp"
-#include "../client/client.hpp"
 #include "../server/ircserv.hpp"
 
 #define WELCOME 1
@@ -42,6 +41,7 @@ class Command {
         void user(std::vector<std::string> &vc, int client_socket);
         void quit(std::vector<std::string> &vc, int client_socket);
         void join(std::vector<std::string> &vc, int client_socket);
+//         void join_with_key(std::vector<std::string> &vc, int client_socket);
         void part(std::vector<std::string> &vc, int client_socket);
         void privmsg(std::vector<std::string> &vc, int client_socket);
         void notice(std::vector<std::string> &vc, int client_socket);

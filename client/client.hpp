@@ -6,15 +6,14 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 15:06:39 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/18 18:47:44 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/19 19:18:24 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIENT_HPP
 #define CLIENT_HPP
 
-#include "../server/ircserv.hpp"
-#include "../replays.hpp"
+//#include "../replays.hpp"
 #include "../includes.hpp"
 
 #define ONLINE 2

@@ -6,15 +6,15 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:38 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/19 09:16:14 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/19 19:14:33 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef IRCSERV_HPP
 #define IRCSERV_HPP
 
-#include "../client/client.hpp"
 #include "../includes.hpp"
+#include "../channel/Channel.hpp"
 
 #define MAX_HOST 1025
 #define MAX_SERV 32
@@ -26,7 +26,8 @@ class Client;
 class ircserv
 {
     public:
-        std::map<int, Client *> _clients;
+        std::map<int, Client *>			_clients;
+		std::map<std::string, Channel*>	_channels;
         ircserv();
         ircserv(int port, std::string password);
         ircserv(const ircserv &ircserv);

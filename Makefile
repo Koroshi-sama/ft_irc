@@ -6,7 +6,7 @@
 #    By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/05 10:28:43 by aerrazik          #+#    #+#              #
-#    Updated: 2023/09/18 18:27:35 by aerrazik         ###   ########.fr        #
+#    Updated: 2023/09/19 18:57:45 by atouba           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,13 +15,13 @@ GFC = -Wall -Werror -Wextra -std=c++98 -g3 -fsanitize=address
 NAME = ircserv
 SRC =	main.cpp \
 		tools.cpp \
-		replays.cpp \
 		server/ircserv.cpp \
 		client/client.cpp \
 		client/client_init.cpp \
 		command/command.cpp \
 		command/NICK.cpp \
 		command/USER.cpp \
+		command/PRIVMSG.cpp
 
 OBJS = $(SRC:.cpp=.o)
 

@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:18 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/19 10:31:51 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/19 19:21:25 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,6 @@ void Command::join(std::vector<std::string> &vc, int client_socket) {
 
 void Command::part(std::vector<std::string> &vc, int client_socket) {
     std::cout << "Paaaaaart" << vc[1] << client_socket << std::endl;
-}
-
-void Command::privmsg(std::vector<std::string> &vc, int client_socket) {
-    std::cout << "Prrrrrrrivmsg" << vc[1] << client_socket << std::endl;
 }
 
 void Command::notice(std::vector<std::string> &vc, int client_socket) {
