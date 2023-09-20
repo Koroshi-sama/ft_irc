@@ -6,7 +6,7 @@
 #    By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/05 10:28:43 by aerrazik          #+#    #+#              #
-#    Updated: 2023/09/19 18:57:45 by atouba           ###   ########.fr        #
+#    Updated: 2023/09/20 16:19:59 by atouba           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,9 +19,11 @@ SRC =	main.cpp \
 		client/client.cpp \
 		client/client_init.cpp \
 		command/command.cpp \
+		channel/Channel.cpp \
 		command/NICK.cpp \
 		command/USER.cpp \
-		command/PRIVMSG.cpp
+		command/PRIVMSG.cpp \
+		command/JOIN.cpp
 
 OBJS = $(SRC:.cpp=.o)
 

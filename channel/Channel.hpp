@@ -15,6 +15,8 @@ private:
 public:
 	std::vector<Client>	_members;
 
+	Channel(std::string);
+	~Channel();
 	std::string		get_channel_name() const;
 	unsigned int	get_current_members_n() const;
 	std::string		get_key() const;
