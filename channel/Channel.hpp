@@ -14,6 +14,7 @@ private:
 
 public:
 	std::vector<Client>	_members;
+	int					_operators_n;
 
 	Channel(std::string);
 	~Channel();
