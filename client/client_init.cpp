@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 22:36:24 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/18 18:47:31 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/20 13:29:39 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,3 +85,6 @@ void    Client::remove_channel(std::string channel) {
     }
 }
 
+std::string	Client::get_prefix() const {
+	return get_nickname() + "!" + get_username() + "@" + get_hostname();
+}

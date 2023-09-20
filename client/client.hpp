@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 15:06:39 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/19 19:18:24 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/20 13:26:08 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ class Client {
         std::string get_username() const ;
         std::string get_realname() const ;
         std::string get_hostname() const ;
+		std::string	get_prefix() const;
         int         get_status() const ;
         std::vector<std::string> get_channels() const;
         void set_nickname(std::string nickname);
