@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:14 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/19 19:18:41 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/20 09:39:55 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ class Command {
         typedef void (Command::*CommandFunction)(std::vector<std::string> &, int);
         std::map<std::string, CommandFunction> _commands;
         std::map<std::string, std::vector<std::string> > _params;
+		std::string	_buffer;		// Sometimes we need the whole buffer the client sent (e.g in privmsg command, the message might be "hello                               world" and it has to get sent to the target exactly like that)
 
         void parse_command(std::string command);
 

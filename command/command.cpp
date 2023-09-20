@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:18 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/19 19:21:25 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/20 09:50:37 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ Command::Command(ircserv *ircserv): _ircserv(ircserv) {
 Command::~Command() {}
 
 void Command::handle_commands(std::string command, int client_socket) {
+	_buffer = command;
     parse_command(command);
     std::map<std::string, std::vector<std::string> >::iterator it = _params.begin();
     for (; it != _params.end(); it++) {
