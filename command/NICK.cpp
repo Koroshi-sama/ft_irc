@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 15:49:04 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/19 10:32:57 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/21 10:21:15 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,27 +22,51 @@ bool valid_nickname(std::string nickname) {
     return (true);
 }
 
+bool Command::check_nickname(std::string nickname) {
+    std::map<int, Client *>::iterator it = _ircserv->_clients.begin();
+    for (; it != _ircserv->_clients.end(); it++) {
+        if (it->second->get_nickname() == nickname) {
+            return (false);
+        }
+    }
+    return (true);
+}
+
 void Command::nick(std::vector<std::string> &vc, int client_socket) {
-    
+    Client *client = _ircserv->_clients[client_socket];
     if (vc[1].empty() && _ircserv->_clients[client_socket]->get_nickname().empty()) {
-        std::string reply = std::string("431 ERR_NONICKNAMEGIVEN\r\n") + "No nickname given";
+        std::string reply = std::string("431 ERR_NONICKNAMEGIVEN\r\n") + "No nickname given\r\n";
         send(client_socket, reply.c_str(), reply.size() + 1, 0);
     }
     else if (!valid_nickname(vc[1])) {
-        std::string reply = std::string("432 ERR_ERRONEUSNICKNAME\r\n") + vc[1] + "Erroneus nickname";
+        std::string reply = std::string("432 ERR_ERRONEUSNICKNAME\r\n") + vc[1] + "Erroneus nickname\r\n";
         send(client_socket, reply.c_str(), reply.size() + 1, 0);
+    }
+    else if (!check_nickname(vc[1])) {
+        if (!client->get_nickname().empty()) {
+            std::string reply = "433 ERR_NICKNAMEINUSE\r\n" + vc[1] + ":Nickname is already in use\r\n";
+            send(client_socket, reply.c_str(), reply.size() + 1, 0);
+        }
+        // add an underscore to the nickname and then check if it exists if no set it as the new nickname if yes add an other underscore and so on
+        std::string nickname = vc[1] + "_";
+        while (!check_nickname(nickname)) {
+            nickname += "_";
+        }
+        client->set_nickname(nickname);
+        std::cout << "Nickname changed to " << client->get_nickname() << std::endl;
     }
     else
     {
-        Client *client = _ircserv->_clients[client_socket];
-        if (client->get_status() == ONLINE || client->get_status() == REGISTRED) {
-            std::string reply = std::string("433 ERR_NICKNAMEINUSE\r\n") + vc[1] + "Nick" + client->get_nickname() + "is already in use";
+        if (client->get_nickname() == "") {
+            client->set_nickname(vc[1]);
+        } else {
+            //change nickname and send a reply to the concerned client
+            std::string old_nickname = client->get_nickname();
+            client->set_nickname(vc[1]);
+            std::cout << "Old --> " << old_nickname << "New--> " << vc[1] << std::endl;
+            // :hhhh!aerrazik@localhost NICK hit
+            std::string reply = ":" + old_nickname + "!" + client->get_username() + "@localhost NICK " + vc[1] + "\r\n";
             send(client_socket, reply.c_str(), reply.size() + 1, 0);
         }
-        else {
-            client->set_nickname(vc[1]);
-        }
-
     } 
 }
-

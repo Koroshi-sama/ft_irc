@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:14 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/19 10:30:51 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/21 09:54:37 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,10 @@ class Command {
         typedef void (Command::*CommandFunction)(std::vector<std::string> &, int);
         std::map<std::string, CommandFunction> _commands;
         std::map<std::string, std::vector<std::string> > _params;
+        std::map<std::string, std::vector<Client *> > _channels;
 
         void parse_command(std::string command);
+        bool check_nickname(std::string nickname);
 
         void nick(std::vector<std::string> &vc, int client_socket);
         void pass(std::vector<std::string> &vc, int client_socket);
@@ -47,6 +49,8 @@ class Command {
         void notice(std::vector<std::string> &vc, int client_socket);
         void ping(std::vector<std::string> &vc, int client_socket);
         void pong(std::vector<std::string> &vc, int client_socket);
+        void whois(std::vector<std::string> &vc, int client_socket);
+        void mode(std::vector<std::string> &vc, int client_socket);
 };
 
 

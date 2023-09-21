@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:32 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/19 10:34:39 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/20 14:23:23 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ int main(int ac, char **av) {
                     int bytesReceived = recv(fds[i].fd, buffer, sizeof(buffer), 0);
                     if (bytesReceived == -1) {
                         std::cerr << "Error reading from client" << std::endl;
-                        break;
+                        exit(1);
                     }
-                    else if (strcmp(buffer, "QUIT\n") == 0 || bytesReceived == 0) {
+                    else if (strcmp(buffer, "QUIT :leaving\r\n") == 0 || bytesReceived == 0) {
                         // Remove client from the map and close the socket. Check client.cpp for remove_client() function.
 
                         /**DEBUG MSG**/
