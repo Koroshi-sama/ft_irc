@@ -6,12 +6,12 @@
 #    By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/05 10:28:43 by aerrazik          #+#    #+#              #
-#    Updated: 2023/09/19 18:31:30 by aerrazik         ###   ########.fr        #
+#    Updated: 2023/09/21 12:31:55 by aerrazik         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = c++
-GFC = -Wall -Werror -Wextra -std=c++98 -g3 -fsanitize=address
+GFC = -Wall -Werror -Wextra -std=c++98 #-g3 -fsanitize=address
 NAME = ircserv
 SRC =	main.cpp \
 		tools.cpp \

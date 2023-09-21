@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 15:49:04 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/21 10:21:15 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/21 12:40:34 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,16 @@ void Command::nick(std::vector<std::string> &vc, int client_socket) {
     Client *client = _ircserv->_clients[client_socket];
     if (vc[1].empty() && _ircserv->_clients[client_socket]->get_nickname().empty()) {
         std::string reply = std::string("431 ERR_NONICKNAMEGIVEN\r\n") + "No nickname given\r\n";
-        send(client_socket, reply.c_str(), reply.size() + 1, 0);
+        send(client_socket, reply.c_str(), reply.size(), 0);
     }
     else if (!valid_nickname(vc[1])) {
         std::string reply = std::string("432 ERR_ERRONEUSNICKNAME\r\n") + vc[1] + "Erroneus nickname\r\n";
-        send(client_socket, reply.c_str(), reply.size() + 1, 0);
+        send(client_socket, reply.c_str(), reply.size(), 0);
     }
     else if (!check_nickname(vc[1])) {
         if (!client->get_nickname().empty()) {
             std::string reply = "433 ERR_NICKNAMEINUSE\r\n" + vc[1] + ":Nickname is already in use\r\n";
-            send(client_socket, reply.c_str(), reply.size() + 1, 0);
+            send(client_socket, reply.c_str(), reply.size(), 0);
         }
         // add an underscore to the nickname and then check if it exists if no set it as the new nickname if yes add an other underscore and so on
         std::string nickname = vc[1] + "_";
@@ -65,8 +65,8 @@ void Command::nick(std::vector<std::string> &vc, int client_socket) {
             client->set_nickname(vc[1]);
             std::cout << "Old --> " << old_nickname << "New--> " << vc[1] << std::endl;
             // :hhhh!aerrazik@localhost NICK hit
-            std::string reply = ":" + old_nickname + "!" + client->get_username() + "@localhost NICK " + vc[1] + "\r\n";
-            send(client_socket, reply.c_str(), reply.size() + 1, 0);
+            std::string reply = "\r\n:" + old_nickname + "!" + client->get_username() + "@localhost NICK " + vc[1] + "\r\n";
+            send(client_socket, reply.c_str(), reply.size(), 0);
         }
     } 
 }
