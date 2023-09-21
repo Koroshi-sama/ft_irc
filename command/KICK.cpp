@@ -35,6 +35,17 @@ bool	check_kick_req(std::vector<std::string>& vc, int client_s, ircserv& serv) {
 	return true;
 }
 
+void	remove_user(ircserv& serv, std::string chan, std::string user) {
+	std::vector<Client>::iterator	it = serv._channels[chan]->_members.begin();
+
+	for (; it != serv._channels[chan]->_members.end(); it++) {
+		if (it->get_nickname().compare(user) == 0) {
+			serv._channels[chan]->_members.erase(it);
+			return ;
+		}
+	}
+}
+
 // ! should send the corresponding errors
 void	Command::kick(std::vector<std::string> &vc, int client_socket) {
 	std::string	reply;
@@ -46,4 +57,5 @@ void	Command::kick(std::vector<std::string> &vc, int client_socket) {
 	reply = "\r\n:" + socket_nickname(*_ircserv, client_socket) + " KICK " + vc[1] \
 		+ " " + vc[2] + " "  + _ircserv->_channels[vc[1]]->_default_kick_msg + "\r\n";
 	forward_to_chan(*_ircserv, vc[1], reply, client_socket);
+	remove_user(*_ircserv, vc[1], vc[2]);
 }
