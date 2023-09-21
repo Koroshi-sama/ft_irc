@@ -44,7 +44,6 @@ void	Command::kick(std::vector<std::string> &vc, int client_socket) {
 		return ;
 	}
 	reply = "\r\n:" + socket_nickname(*_ircserv, client_socket) + " KICK " + vc[1] \
-		+ " " + _ircserv->_channels[vc[1]]->_default_kick_msg + "\r\n";
-	if (send(client_socket, reply.c_str(), reply.size() + 1, 0) < 0)
-		std::cout << "KICK REPLY DIDN'T GET SEND\n";
+		+ " " + vc[2] + " "  + _ircserv->_channels[vc[1]]->_default_kick_msg + "\r\n";
+	forward_to_chan(*_ircserv, vc[1], reply, client_socket);
 }
