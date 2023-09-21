@@ -38,7 +38,7 @@ void	target_channel(int client_s, std::map<int, Client*> clients, std::string ta
 	std::string	msg;
 
 	if (serv._channels.find(target) == serv._channels.end())
-		send(client_s, "403 ERR_NOSUCHCHANNEL\r\n...", 32, 0);
+		send(client_s, "403 ERR_NOSUCHCHANNEL\r\n...", 27, 0);
 	else {
 		std::vector<Client>::iterator	it;
 		for (it = serv._channels[target]->_members.begin(); it != serv._channels[target]->_members.end(); it++) {

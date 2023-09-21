@@ -70,10 +70,11 @@ void	Command::join(std::vector<std::string> &vc, int client_socket) {
 			if (this->_ircserv->_channels.find(vc[1]) == this->_ircserv->_channels.end()) {
 				// create channel and add user       // later enable this user to be an operator
 				create_chan_add_cl(this->_ircserv, vc[1], client_socket);
+				send_members_list(this->_ircserv, vc[1],  client_socket);
 			}
 			else {
 				// channel exists
-				if (this->_ircserv->_channels[vc[1]]->pass_user_limit())
+				if (this->_ircserv->_channels[vc[1]]->is_channel_full())
 					// send error
 				if (this->_ircserv->_channels[vc[1]]->get_invite_bool()) {
 					// send error

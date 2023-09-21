@@ -9,7 +9,7 @@ private:
 	std::string			_channel_name;
 	bool				_key_authentification;
 	bool				_is_invite_only;
-	bool				_is_user_limit;
+	int					_user_limit;
 	std::string			_key;
 
 public:
@@ -26,7 +26,7 @@ public:
 	bool			get_invite_bool() const;
 	bool			get_user_limit_bool() const;
 
-	bool			pass_user_limit();
+	bool			is_channel_full() const;
 
 	void			join(Client cl);
 };
