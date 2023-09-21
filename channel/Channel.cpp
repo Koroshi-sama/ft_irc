@@ -6,7 +6,7 @@ Channel::Channel(std::string ch_name) {
 	_is_invite_only = false;
 	_user_limit = -1;
 	_operators_n = 0;
-
+	_default_kick_msg = "You're so fucking annoying";
 }
 
 Channel::~Channel() {}

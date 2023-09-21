@@ -15,6 +15,7 @@ public:
 	std::string			_channel_name;
 	std::vector<Client>	_members;
 	int					_operators_n;
+	std::string			_default_kick_msg;
 
 	Channel(std::string);
 	~Channel();
