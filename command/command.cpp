@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:18 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/21 10:51:24 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/21 13:42:27 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void Command::quit(std::vector<std::string> &vc, int client_socket) {
     // It should delete the client that has quit the client and send a message to all the clients in the same channel
     Client *client = _ircserv->_clients[client_socket];
     std::string reply = "ERROR :Closing Link: " + client->get_nickname() + " (" + vc[1] + ")\r\n";
-    send(client_socket, reply.c_str(), reply.size() + 1, 0);
+    send(client_socket, reply.c_str(), reply.size(), 0);
     close(client_socket);
     _ircserv->_clients.erase(client_socket);
 
@@ -84,8 +84,8 @@ void Command::notice(std::vector<std::string> &vc, int client_socket) {
 void Command::ping(std::vector<std::string> &vc, int client_socket) {
     std::cout << "Piiiiiiiiing" << vc[1] << client_socket << std::endl;
     // Client *client = _ircserv->_clients[client_socket];
-    std::string reply = "409 ERR_NOORIGIN\r\nPONG 127.0.0.1 :127.0.0.1\r\n";
-    send(client_socket, reply.c_str(), reply.size() + 1, 0);
+    std::string reply = "\r\nPONG 127.0.0.1 :127.0.0.1\r\n";
+    send(client_socket, reply.c_str(), reply.size(), 0);
 }
 
 void Command::pong(std::vector<std::string> &vc, int client_socket) {
