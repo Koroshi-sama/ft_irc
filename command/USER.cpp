@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 17:55:22 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/19 10:19:01 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/20 19:57:00 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,18 @@ void Command::user(std::vector<std::string> &vc, int client_socket) {
             return;
         }
         client->set_username(vc[1]);
-        client->set_realname(vc[4].substr(1));
-        std::cout << client->get_nickname();
+        client->set_realname(vc[4].substr(1) + " " + vc[5]);
+        std::cout << "[" << client->get_nickname() << "]" << std::endl;
         std::string reply = "001 RPL_WELCOME\r\nWelcome to the IRC Network " + client->get_nickname() + "!"+ client->get_username() + "@" + client->get_hostname() + "\r\n";
         send(client_socket, reply.c_str(), reply.size() + 1, 0);
         reply = "002 RPL_YOURHOST\r\nYour host is " + client->get_hostname() + ", running version 1.0\r\n";
         send(client_socket, reply.c_str(), reply.size() + 1, 0);
         reply = "003 RPL_CREATED\r\nThis server was created " + _ircserv->get_creation_time() + "\r\n";
         send(client_socket, reply.c_str(), reply.size() + 1, 0);
-        reply = "004 RPL_MYINFO\r\nIRC 1.0 test test\r\n";
+        reply = "004 RPL_MYINFO\r\nIRC 1.0 +i\r\n:RPL_WELCOME!" + client->get_username() + "@" + client->get_hostname() + " NICK " + client->get_nickname() + "\r\n";
         send(client_socket, reply.c_str(), reply.size() + 1, 0);
         std::cout << "Wach tsifet" << std::endl;
-        reply = "005 RPL_BOUNCE\r\nTry server IRC, port 6670";
+        reply = "005  RPL_ISUPPORT\r\n" + client->get_nickname() + " CHANTYPES=# CHANLIMIT=#:1\r\n";
         send(client_socket, reply.c_str(), reply.size() + 1, 0);
         client->set_status(ONLINE);
     }

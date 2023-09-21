@@ -6,14 +6,14 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 15:06:39 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/20 13:26:08 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/21 10:48:24 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIENT_HPP
 #define CLIENT_HPP
 
-//#include "../replays.hpp"
+// #include "../server/ircserv.hpp"
 #include "../includes.hpp"
 
 #define ONLINE 2
@@ -29,7 +29,7 @@ class Client {
         std::string _realname;
         std::string _hostname;
         int         _status;
-        std::vector<std::string> _channels;
+        std::string _channel;
 
     public:
         Client();
@@ -43,14 +43,14 @@ class Client {
         std::string get_hostname() const ;
 		std::string	get_prefix() const;
         int         get_status() const ;
-        std::vector<std::string> get_channels() const;
+        std::string get_channel() const;
         void set_nickname(std::string nickname);
         void set_username(std::string username);
         void set_realname(std::string realname);
         void set_hostname(std::string hostname);
         void set_status(int status);
-        void add_channel(std::string channel);
-        void remove_channel(std::string channel);
+        void set_channel(std::string channel);
+
 };
 
 #endif

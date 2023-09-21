@@ -6,7 +6,7 @@
 #    By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/05 10:28:43 by aerrazik          #+#    #+#              #
-#    Updated: 2023/09/20 16:19:59 by atouba           ###   ########.fr        #
+#    Updated: 2023/09/21 10:57:36 by atouba           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,9 +21,11 @@ SRC =	main.cpp \
 		command/command.cpp \
 		channel/Channel.cpp \
 		command/NICK.cpp \
+		command/JOIN.cpp \
 		command/USER.cpp \
 		command/PRIVMSG.cpp \
-		command/JOIN.cpp
+		command/WHOIS.cpp \
+		command/MODE.cpp \
 
 OBJS = $(SRC:.cpp=.o)
 

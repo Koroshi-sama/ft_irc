@@ -6,13 +6,13 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 22:36:24 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/20 13:29:39 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/21 10:49:14 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.hpp"
 
-Client::Client(): _nickname(""), _username(""), _realname(""), _status(0) {}
+Client::Client(): _nickname(""), _username(""), _realname(""), _status(0), _channel("") {}
 
 Client::Client(const Client &client) {*this = client;}
 
@@ -46,6 +46,10 @@ void    Client::set_status(int status) {
     _status = status;
 }
 
+void    Client::set_channel(std::string channel) {
+    _channel = channel;
+}
+
 std ::string    Client::get_nickname() const {
     return (_nickname);
 }
@@ -68,21 +72,8 @@ int    Client::get_status() const {
 
 Client::~Client() {}
 
-std::vector<std::string> Client::get_channels() const {
-    return (_channels);
-}
-
-void    Client::add_channel(std::string channel) {
-    _channels.push_back(channel);
-}
-
-void    Client::remove_channel(std::string channel) {
-    for (std::vector<std::string>::size_type i = 0; i < _channels.size(); i++) {
-        if (_channels[i] == channel) {
-            _channels.erase(_channels.begin() + i);
-            break;
-        }
-    }
+std::string Client::get_channel() const {
+    return (_channel);
 }
 
 std::string	Client::get_prefix() const {
