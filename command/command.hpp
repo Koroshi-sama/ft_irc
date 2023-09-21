@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:14 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/21 15:47:34 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/21 17:20:03 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,6 @@ class Command {
         void kick(std::vector<std::string> &vc, int client_socket);
 };
 
-int	target_socket(std::string nickname, std::map<int, Client*> clients);
+int	target_socket(std::string nickname, std::map<int, Client*>& clients);
 
 #endif

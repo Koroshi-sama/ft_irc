@@ -1,6 +1,6 @@
 #include "command.hpp"
 
-int	target_socket(std::string nickname, std::map<int, Client*> clients) {
+int	target_socket(std::string nickname, std::map<int, Client*>& clients) {
 	std::map<int, Client*>::iterator	it;
 
 	for (it = clients.begin(); it != clients.end(); it++) {
@@ -10,7 +10,7 @@ int	target_socket(std::string nickname, std::map<int, Client*> clients) {
 	return -1;
 }
 
-void	target_client(int client_s, std::map<int, Client*> clients, std::string target, std::string buffer) {
+void	target_client(int client_s, std::map<int, Client*>& clients, std::string target, std::string buffer) {
 	int			target_s;
 	std::string	reply;
 	std::string	msg;
