@@ -37,22 +37,15 @@ void	target_channel(int client_s, std::map<int, Client*> clients, std::string ta
 	std::string	reply;
 	std::string	msg;
 
-	std::cout << "HERE IN TARGET_CHANNEL\n";
-	std::cout << "target channel: " << target<< std::endl;
-	std::cout << "size: " << serv._channels.size() << std::endl;
 	if (serv._channels.find(target) == serv._channels.end()) {
 		std::cout << "CHANNel not found\n";
-// 		for (std::map<std::string, Channel*>::iterator it = serv._channels.begin(); it != serv._channels.end(); it++)
-// 			std::cout << it->first << "  ";
 		send(client_s, "403 ERR_NOSUCHCHANNEL\r\n...", 27, 0);
 	}
 	else {
 		std::vector<Client>::iterator	it;
-		std::cout << "HERE\n";
 		for (it = serv._channels[target]->_members.begin(); it != serv._channels[target]->_members.end(); it++) {
 			if (target_socket(it->get_nickname(), clients) == client_s)
 				continue ;
-		std::cout << "HERE\n";
 			// SEND MESSAGE TO EVERY MEMBER
 			target_s = target_socket(it->get_nickname(), clients);
 			msg = buffer.erase(0, buffer.find(':'));
@@ -74,7 +67,6 @@ void Command::privmsg(std::vector<std::string> &vc, int client_socket) {
 	std::string	msg;
 	std::string	reply;
 
-	std::cout << "###############################################\n";
 	if (vc.size() < 3)
 		std::cout << "LESS THAN 3 ARGS.................. send error (if any) later\n";
 	else if (this->_ircserv->_clients.find(client_socket) == this->_ircserv->_clients.end())  // remove this condition later
