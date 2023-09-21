@@ -1,5 +1,4 @@
 #include "command.hpp"
-
 // check whether the client can join the channel or not
 // 		check the user limit
 // 		check the key provided if the channel has a key            a key is a password set by the operator
@@ -32,11 +31,13 @@ void	create_chan_add_cl(ircserv *serv, std::string chan, int client_s) {
 	int	target_s;
 	std::string	reply;
 
-	serv->_channels[chan] = new Channel(chan);
+	serv->_channels.insert(std::pair<std::string, Channel*>(chan, new Channel(chan)));
+	std::cout << "CHANNEL name: " << serv->_channels[chan]->_channel_name << std::endl;
+	std::cout << "map size: " << serv->_channels.size() << std::endl;
 	serv->_channels[chan]->_members.push_back(*serv->_clients[client_s]);
 	serv->_channels[chan]->_operators_n = 1;
 
-	reply = ":" + serv->_clients[client_s]->get_nickname() + " JOIN " + chan + "\r\n";
+	reply = "\r\n:" + serv->_clients[client_s]->get_nickname() + " JOIN " + chan + "\r\n";
 	// there still 2 messages that have to be sent
 	target_s = client_s;
 	if (send(target_s, reply.c_str(), reply.size() + 1, 0) < 0)
@@ -48,11 +49,14 @@ void	send_members_list(ircserv* serv, std::string chan, int client_s) {
 	std::string	reply;
 
 	// "=" char denotes that the channel is public, when it's not?
-	reply = serv->_clients[client_s]->get_nickname() + " = " + chan + " :";
+	reply = "366\r\n:" + serv->_clients[client_s]->get_hostname() + " 353 " + serv->_clients[client_s]->get_nickname() + " = " + chan + " :";
 	reply += "@" + serv->_channels[chan]->_members[0].get_nickname();
-	for (unsigned int i = 1; i < serv->_channels[chan]->_members.size(); i++)
-		reply += " " + serv->_channels[chan]->_members[i].get_nickname();
+// 	for (unsigned int i = 1; i < serv->_channels[chan]->_members.size(); i++)
+// 		reply += " " + serv->_channels[chan]->_members[i].get_nickname();
 	reply += "\r\n";
+	std::cout << "Reply: |" << reply << "|";
+	send(client_s, reply.c_str(), reply.size() + 1, 0);
+	reply = "353\r\n:" + serv->_clients[client_s]->get_hostname() + " 366 " + serv->_clients[client_s]->get_nickname() + " " + chan + " :End of /NAMES list.\r\n";
 	send(client_s, reply.c_str(), reply.size() + 1, 0);
 }
 
@@ -67,8 +71,10 @@ void	Command::join(std::vector<std::string> &vc, int client_socket) {
 			std::cout << "We will ignore this req. You can't join multiple channels at the same time or issue multiple passwords\n";
 		}
 		else {
+				std::cout << "CHANNELLLLL\n";
 			if (this->_ircserv->_channels.find(vc[1]) == this->_ircserv->_channels.end()) {
 				// create channel and add user       // later enable this user to be an operator
+				std::cout << "CREATE CHANNELLLLL\n";
 				create_chan_add_cl(this->_ircserv, vc[1], client_socket);
 				send_members_list(this->_ircserv, vc[1],  client_socket);
 			}
@@ -84,7 +90,7 @@ void	Command::join(std::vector<std::string> &vc, int client_socket) {
 					// SUCCESS
 					for (std::vector<Client>::iterator it = this->_ircserv->_channels[vc[1]]->_members.begin();\
 					it != this->_ircserv->_channels[vc[1]]->_members.end(); it++) {
-						reply = ":" + this->_ircserv->_clients[client_socket]->get_nickname() + " JOIN " + vc[1] + "\r\n";
+						reply = "\r\n:" + this->_ircserv->_clients[client_socket]->get_nickname() + " JOIN " + ":" + vc[1] + "\r\n";
 						target_s = target_socket(it->get_nickname(), this->_ircserv->_clients);
 						if (send(target_s, reply.c_str(), reply.size() + 1, 0) < 0)
 							std::cout << "JOIN MESSAGE IS NOT SENT TO THE MEMBERS OF THE CHANNEL\n";

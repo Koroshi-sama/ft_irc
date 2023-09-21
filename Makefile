@@ -6,7 +6,7 @@
 #    By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/05 10:28:43 by aerrazik          #+#    #+#              #
-#    Updated: 2023/09/21 10:57:36 by atouba           ###   ########.fr        #
+#    Updated: 2023/09/21 12:26:06 by atouba           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,8 @@ SRC =	main.cpp \
 		server/ircserv.cpp \
 		client/client.cpp \
 		client/client_init.cpp \
-		command/command.cpp \
 		channel/Channel.cpp \
+		command/command.cpp \
 		command/NICK.cpp \
 		command/JOIN.cpp \
 		command/USER.cpp \

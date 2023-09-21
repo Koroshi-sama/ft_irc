@@ -18,7 +18,7 @@ void	target_client(int client_s, std::map<int, Client*> clients, std::string tar
 	target_s = target_socket(target, clients);
 	if (target_s > 0) {
 		msg = buffer.erase(0, buffer.find(':'));
-		reply = ":" + clients[client_s]->get_nickname() + " PRIVMSG " + \
+		reply = "\r\n:" + clients[client_s]->get_nickname() + " PRIVMSG " + \
 				target + " " + msg + "\r\n";
 		if (send(target_s, reply.c_str(), reply.size() + 1, 0) > 0) {
 			std::cout << "THE MESSAGE IS SENT\n";
@@ -32,20 +32,31 @@ void	target_client(int client_s, std::map<int, Client*> clients, std::string tar
 }
 
 // later check the other conditions (if any) before sending a message to a channel
-void	target_channel(int client_s, std::map<int, Client*> clients, std::string target, std::string buffer, ircserv serv) {
+void	target_channel(int client_s, std::map<int, Client*> clients, std::string target, std::string buffer, ircserv& serv) {
 	int			target_s;
 	std::string	reply;
 	std::string	msg;
 
-	if (serv._channels.find(target) == serv._channels.end())
+	std::cout << "HERE IN TARGET_CHANNEL\n";
+	std::cout << "target channel: " << target<< std::endl;
+	std::cout << "size: " << serv._channels.size() << std::endl;
+	if (serv._channels.find(target) == serv._channels.end()) {
+		std::cout << "CHANNel not found\n";
+// 		for (std::map<std::string, Channel*>::iterator it = serv._channels.begin(); it != serv._channels.end(); it++)
+// 			std::cout << it->first << "  ";
 		send(client_s, "403 ERR_NOSUCHCHANNEL\r\n...", 27, 0);
+	}
 	else {
 		std::vector<Client>::iterator	it;
+		std::cout << "HERE\n";
 		for (it = serv._channels[target]->_members.begin(); it != serv._channels[target]->_members.end(); it++) {
+			if (target_socket(it->get_nickname(), clients) == client_s)
+				continue ;
+		std::cout << "HERE\n";
 			// SEND MESSAGE TO EVERY MEMBER
 			target_s = target_socket(it->get_nickname(), clients);
 			msg = buffer.erase(0, buffer.find(':'));
-			reply = ":" + clients[client_s]->get_prefix() + " PRIVMSG " + \
+			reply = "\r\n:" + clients[client_s]->get_prefix() + " PRIVMSG " + \
 					target + " " + msg + "\r\n";
 
 			if (send(target_s, reply.c_str(), reply.size() + 1, 0) > 0) {
@@ -63,6 +74,7 @@ void Command::privmsg(std::vector<std::string> &vc, int client_socket) {
 	std::string	msg;
 	std::string	reply;
 
+	std::cout << "###############################################\n";
 	if (vc.size() < 3)
 		std::cout << "LESS THAN 3 ARGS.................. send error (if any) later\n";
 	else if (this->_ircserv->_clients.find(client_socket) == this->_ircserv->_clients.end())  // remove this condition later

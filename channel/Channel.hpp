@@ -6,13 +6,13 @@
 
 class Channel {
 private:
-	std::string			_channel_name;
 	bool				_key_authentification;
 	bool				_is_invite_only;
 	int					_user_limit;
 	std::string			_key;
 
 public:
+	std::string			_channel_name;
 	std::vector<Client>	_members;
 	int					_operators_n;
 
