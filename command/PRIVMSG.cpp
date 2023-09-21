@@ -31,9 +31,23 @@ void	target_client(int client_s, std::map<int, Client*>& clients, std::string ta
 		std::cout << "TARGET NOT FOUND.................. send error later\n";
 }
 
+// give a msg, it will simply forward it to all the members of the channel, except the sender
+void	forward_to_chan(ircserv& serv, std::string chan, std::string msg, int client_s) {
+	std::vector<Client>::iterator	it;
+	int								target_s;
+
+	for (it = serv._channels[chan]->_members.begin(); it != serv._channels[chan]->_members.end(); it++) {
+		if (target_socket(it->get_nickname(), serv._clients) == client_s)
+			continue ;
+		target_s = target_socket(it->get_nickname(), serv._clients);
+		if (send(target_s, msg.c_str(), msg.size() + 1, 0) < 0)
+			std::cout << "THE MESSAGE IS NOT SENT\n";
+	}
+}
+
 // later check the other conditions (if any) before sending a message to a channel
 void	target_channel(int client_s, std::map<int, Client*> clients, std::string target, std::string buffer, ircserv& serv) {
-	int			target_s;
+// 	int			target_s;
 	std::string	reply;
 	std::string	msg;
 
@@ -42,23 +56,10 @@ void	target_channel(int client_s, std::map<int, Client*> clients, std::string ta
 		send(client_s, "403 ERR_NOSUCHCHANNEL\r\n...", 27, 0);
 	}
 	else {
-		std::vector<Client>::iterator	it;
-		for (it = serv._channels[target]->_members.begin(); it != serv._channels[target]->_members.end(); it++) {
-			if (target_socket(it->get_nickname(), clients) == client_s)
-				continue ;
-			// SEND MESSAGE TO EVERY MEMBER
-			target_s = target_socket(it->get_nickname(), clients);
-			msg = buffer.erase(0, buffer.find(':'));
-			reply = "\r\n:" + clients[client_s]->get_prefix() + " PRIVMSG " + \
-					target + " " + msg + "\r\n";
-
-			if (send(target_s, reply.c_str(), reply.size() + 1, 0) > 0) {
-				std::cout << "THE MESSAGE IS SENT\n";
-				std::cout << reply;
-			}
-			else
-				std::cout << "THE MESSAGE DIDN'T GET SENT\n";
-		}
+		msg = buffer.erase(0, buffer.find(':'));
+		reply = "\r\n:" + clients[client_s]->get_prefix() + " PRIVMSG " + \
+				target + " " + msg + "\r\n";
+		forward_to_chan(serv, target, reply, client_s);
 	}
 }
 
