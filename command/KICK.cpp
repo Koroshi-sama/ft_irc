@@ -20,6 +20,17 @@ bool	client_in_chan(ircserv& serv, std::string& chan, std::string client_nick, i
 	return false;
 }
 
+void	send_error(int error, std::string client_nick, int client_s, std::string chan, std::string msg) {
+	// localhost should be replaced by hostname
+	std::string	error_msg =  "\r\n:localhost " + to_string(error) + " " + client_nick + " " + \
+						chan + " :" + msg + "\r\n";
+	
+	if (send(client_s, error_msg.c_str(), error_msg.size() + 1, 0) < 0)
+		std::cout << "ERROR NOT SEND TO USER WHO'S NOT OP\n";
+	else
+		std::cout << "ERROR SENT\n" << error_msg << std::endl;
+}
+
 // check channel exists
 // check requester is operator in channel
 // check target is in channel
@@ -28,8 +39,9 @@ bool	check_kick_req(std::vector<std::string>& vc, int client_s, ircserv& serv) {
 
 	if (serv._channels.find(vc[1]) == serv._channels.end())
 		return (std::cout << "CHANNEL NOT FOUND\n", false);
+	// maybe should also check if client is not in channel
 	if (!client_in_chan(serv, vc[1], client_nick, 0))
-		return (std::cout << "USER NOT OPERATOR\n", false);
+		return (send_error(482, client_nick, client_s, vc[1], " You're not a channel operator"), false);
 	if (!client_in_chan(serv, vc[1], vc[2], -1))
 		return (std::cout << "TARGET (user to be kicked) IS NOT FOUND\n", false);
 	return true;
