@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:14 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/22 08:12:14 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/22 10:30:47 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ class Command {
         void whois(std::vector<std::string> &vc, int client_socket);
         void mode(std::vector<std::string> &vc, int client_socket);
         void kick(std::vector<std::string> &vc, int client_socket);
+        void invite(std::vector<std::string> &vc, int client_socket);
 };
 
 int		target_socket(std::string nickname, std::map<int, Client*>& clients);
