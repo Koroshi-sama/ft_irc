@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:14 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/22 11:02:50 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/22 11:15:50 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ class Command {
 // 		a its socket
 int			target_socket(std::string nickname, std::map<int, Client*>& clients);
 std::string socket_nick(ircserv& serv, int client_s);
+bool		client_in_chan(ircserv& serv, std::string& chan, std::string client_nick, int range);
 void		send_error(int error, std::string client_nick, int client_s, std::string chan, std::string msg);
 void		forward_to_chan(ircserv& serv, std::string chan, std::string msg, int client_s, bool requester_included);
 
