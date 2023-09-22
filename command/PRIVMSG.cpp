@@ -57,7 +57,7 @@ void	target_channel(int client_s, std::map<int, Client*> clients, std::string ta
 	}
 	else {
 		msg = buffer.erase(0, buffer.find(':'));
-		reply = "\r\n:" + clients[client_s]->get_prefix() + " PRIVMSG " + \
+		reply = "\r\n:" + clients[client_s]->get_nickname() + " PRIVMSG " + \
 				target + " " + msg + "\r\n";
 		forward_to_chan(serv, target, reply, client_s, false);
 	}
