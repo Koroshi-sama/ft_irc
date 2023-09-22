@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:14 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/22 10:48:00 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/22 11:02:50 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,11 @@ class Command {
         void invite(std::vector<std::string> &vc, int client_socket);
 };
 
-int		target_socket(std::string nickname, std::map<int, Client*>& clients);
-void    send_error(int error, std::string client_nick, int client_s, std::string chan, std::string msg);
-void	forward_to_chan(ircserv& serv, std::string chan, std::string msg, int client_s, bool requester_included);
+// the following 2 functions do opposite operations, the first takes a nickname and returns
+// 		a its socket
+int			target_socket(std::string nickname, std::map<int, Client*>& clients);
+std::string socket_nick(ircserv& serv, int client_s);
+void		send_error(int error, std::string client_nick, int client_s, std::string chan, std::string msg);
+void		forward_to_chan(ircserv& serv, std::string chan, std::string msg, int client_s, bool requester_included);
 
 #endif
