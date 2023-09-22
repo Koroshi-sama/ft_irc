@@ -32,12 +32,12 @@ void	target_client(int client_s, std::map<int, Client*>& clients, std::string ta
 }
 
 // give a msg, it will simply forward it to all the members of the channel, except the sender
-void	forward_to_chan(ircserv& serv, std::string chan, std::string msg, int client_s) {
+void	forward_to_chan(ircserv& serv, std::string chan, std::string msg, int client_s, bool requester_included) {
 	std::vector<Client>::iterator	it;
 	int								target_s;
 
 	for (it = serv._channels[chan]->_members.begin(); it != serv._channels[chan]->_members.end(); it++) {
-		if (target_socket(it->get_nickname(), serv._clients) == client_s)
+		if (!requester_included && target_socket(it->get_nickname(), serv._clients) == client_s)
 			continue ;
 		target_s = target_socket(it->get_nickname(), serv._clients);
 		if (send(target_s, msg.c_str(), msg.size() + 1, 0) < 0)
@@ -59,7 +59,7 @@ void	target_channel(int client_s, std::map<int, Client*> clients, std::string ta
 		msg = buffer.erase(0, buffer.find(':'));
 		reply = "\r\n:" + clients[client_s]->get_prefix() + " PRIVMSG " + \
 				target + " " + msg + "\r\n";
-		forward_to_chan(serv, target, reply, client_s);
+		forward_to_chan(serv, target, reply, client_s, false);
 	}
 }
 

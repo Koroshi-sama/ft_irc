@@ -56,6 +56,6 @@ void	Command::kick(std::vector<std::string> &vc, int client_socket) {
 	}
 	reply = "\r\n:" + socket_nickname(*_ircserv, client_socket) + " KICK " + vc[1] \
 		+ " " + vc[2] + " "  + _ircserv->_channels[vc[1]]->_default_kick_msg + "\r\n";
-	forward_to_chan(*_ircserv, vc[1], reply, client_socket);
+	forward_to_chan(*_ircserv, vc[1], reply, client_socket, true);
 	remove_user(*_ircserv, vc[1], vc[2]);
 }
