@@ -20,6 +20,7 @@ bool	client_in_chan(ircserv& serv, std::string& chan, std::string client_nick, i
 	return false;
 }
 
+// chan argument (channel) can be given as a command also, when errors have <command> in place of <channel>
 void	send_error(int error, std::string client_nick, int client_s, std::string chan, std::string msg) {
 	// localhost should be replaced by hostname
 	std::string	error_msg =  "\r\n:localhost " + to_string(error) + " " + client_nick + " " + \
@@ -37,6 +38,8 @@ void	send_error(int error, std::string client_nick, int client_s, std::string ch
 bool	check_kick_req(std::vector<std::string>& vc, int client_s, ircserv& serv) {
 	std::string	client_nick = socket_nickname(serv, client_s);
 
+	if (vc.size() < 3)
+		return (send_error(461, client_nick, client_s, vc[1], "Not enough parameters"), false);    // maybe this error is sent by default by irssi
 	if (serv._channels.find(vc[1]) == serv._channels.end())
 		return (send_error(401, client_nick, client_s, vc[1], "No such nick/channel"), false);
 	// maybe should also check if client is not in channel
