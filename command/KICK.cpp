@@ -1,6 +1,6 @@
 #include "command.hpp"
 
-std::string	socket_nickname(ircserv& serv, int client_s) {
+std::string	socket_nick(ircserv& serv, int client_s) {
 	std::string		client_nick = serv._clients[client_s]->get_nickname();
 
 	return client_nick;
@@ -36,7 +36,7 @@ void	send_error(int error, std::string client_nick, int client_s, std::string ch
 // check requester is operator in channel
 // check target is in channel
 bool	check_kick_req(std::vector<std::string>& vc, int client_s, ircserv& serv) {
-	std::string	client_nick = socket_nickname(serv, client_s);
+	std::string	client_nick = socket_nick(serv, client_s);
 
 	if (vc.size() < 3)
 		return (send_error(461, client_nick, client_s, vc[1], "Not enough parameters"), false);    // maybe this error is sent by default by irssi
@@ -69,7 +69,7 @@ void	Command::kick(std::vector<std::string> &vc, int client_socket) {
 		std::cout << "error in kick request\n";
 		return ;
 	}
-	reply = "\r\n:" + socket_nickname(*_ircserv, client_socket) + " KICK " + vc[1] \
+	reply = "\r\n:" + socket_nick(*_ircserv, client_socket) + " KICK " + vc[1] \
 		+ " " + vc[2] + " "  + _ircserv->_channels[vc[1]]->_default_kick_msg + "\r\n";
 	forward_to_chan(*_ircserv, vc[1], reply, client_socket, true);
 	remove_user(*_ircserv, vc[1], vc[2]);
