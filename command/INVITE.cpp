@@ -20,29 +20,48 @@ bool	check_invite_req(std::vector<std::string>& vc, int client_s, ircserv& serv)
 
 	if (serv._channels.find(vc[2]) == serv._channels.end())
 		return (
-			send_error(403, socket_nick(serv, client_s), client_s, vc[2] \
-						, "No such channel"),
+			numerical_message(serv, client_s, 403, vc[2] + " :No such channel..."),
 			false
 			);
+// 		return (
+// 			send_error(403, socket_nick(serv, client_s), client_s, vc[2] 
+// 						, "No such channel"),
+// 			false
+// 			);
 	is_invite_only = serv._channels[vc[2]]->get_invite_bool();
 	if (!is_invite_only && !client_in_chan(serv, vc[2], socket_nick(serv, client_s), -1))
 		return (
-			send_error(442, socket_nick(serv, client_s), client_s, vc[2] \
-						, "You're not on that channel"),
+			numerical_message(serv, client_s, 442, vc[2] +\
+					" :You're not on that channel..."),
 			false
 			);
+// 		return (
+// 			send_error(442, socket_nick(serv, client_s), client_s, vc[2] 
+// 						, "You're not on that channel"),
+// 			false
+// 			);
 	if (is_invite_only && !client_in_chan(serv, vc[2], socket_nick(serv, client_s), 0))
 		return (
-			send_error(482, socket_nick(serv, client_s), client_s, vc[2] \
-						, "You're not channel operator"),
+			numerical_message(serv, client_s, 482, vc[2] +\
+					" :You're not channel operator..."),
 			false
 			);
+// 		return (
+// 			send_error(482, socket_nick(serv, client_s), client_s, vc[2] 
+// 						, "You're not channel operator"),
+// 			false
+// 			);
 	if (client_in_chan(serv, vc[2], vc[1], 0))
 		return (
-			send_error(443, socket_nick(serv, client_s), client_s, vc[1] + " " + \
-						vc[2], "is already on channel, yes he already is, yes..."),
+			numerical_message(serv, client_s, 443, vc[2] +\
+					" :is already on channel, yes he already is, yes..."),
 			false
 			);
+// 		return (
+// 			send_error(443, socket_nick(serv, client_s), client_s, vc[1] + " " + 
+// 						vc[2], "is already on channel, yes he already is, yes..."),
+// 			false
+// 			);
 	return true;
 }
 
@@ -51,10 +70,22 @@ void	Command::invite(std::vector<std::string> &vc, int client_socket) {
 		std::cout << "error in invite request\n";
 		return ;
 	}
+	std::cout << "Checked invite req\n";
 	// Send the invitation msg to the target.
 	// Add a function that sends a message command (differentiate between 2 types of
 	// messages: success messages (command) and error messages), and look for making the
 	// overall code cleaner.
 
+// 	command_message(*_ircserv, client_socket, "INVITE", vc[1] + " :" + vc[2]);
+
+	std::string	msg = "\r\n:" + socket_nick(*_ircserv, client_socket) + " INVITE " + \
+					vc[1] + " :" + vc[2] + "\r\n";
+	if (send(
+		target_socket(vc[1], _ircserv->_clients),
+		msg.c_str(),
+		msg.size() + 1,
+		0) < 0)
+		std::cout << "Invite command didn't get send to the target user\n";
 	// send success reply to the invite issuer
+	numerical_message(*_ircserv, client_socket, 341, vc[1] + " " + vc[2]);
 }
