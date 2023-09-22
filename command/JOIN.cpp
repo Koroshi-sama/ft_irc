@@ -28,7 +28,7 @@ bool	check_key_error(ircserv* serv, std::vector<std::string> &vc, int client_soc
 }
 
 void	create_chan_add_cl(ircserv *serv, std::string chan, int client_s) {
-	int	target_s;
+// 	int	target_s;
 	std::string	reply;
 
 	serv->_channels.insert(std::pair<std::string, Channel*>(chan, new Channel(chan)));
@@ -36,30 +36,27 @@ void	create_chan_add_cl(ircserv *serv, std::string chan, int client_s) {
 	serv->_channels[chan]->_operators_n = 1;
 
 	reply = "\r\n:" + serv->_clients[client_s]->get_nickname() + " JOIN " + chan + "\r\n";
-	target_s = client_s;
-	if (send(target_s, reply.c_str(), reply.size() + 1, 0) < 0)
-		std::cout << "JOIN MESSAGE IS NOT SENT TO THE ONLY MEMBER OF THE CHANNEL\n";
-	else {std::cout << "JOIN MESSAGE IS SENT TO THE ONLY MEMBER OF THE CHANNEL\n";}
+	command_message(*serv, client_s, "JOIN", chan);
 }
 
 void	send_members_list(ircserv* serv, std::string chan, int client_s) {
 	std::string	reply;
+	std::string	param;
 
 	// "=" char denotes that the channel is public, when it's not?
-	reply = "\r\n:" + serv->_clients[client_s]->get_hostname() + " 353 " + serv->_clients[client_s]->get_nickname() + " = " + chan + " :";
-	std::cout << "{" << serv->_clients[client_s]->get_hostname() << "}\n";
-	reply += "@" + serv->_channels[chan]->_members[0].get_nickname();
+	param = "= " + chan + " :";
+	param += "@" + serv->_channels[chan]->_members[0].get_nickname();
 	for (unsigned int i = 1; i < serv->_channels[chan]->_members.size(); i++)
-		reply += " " + serv->_channels[chan]->_members[i].get_nickname();
-	reply += "\r\n";
-	send(client_s, reply.c_str(), reply.size() + 1, 0);
-	reply = "\r\n:" + serv->_clients[client_s]->get_hostname() + " 366 " + serv->_clients[client_s]->get_nickname() + " " + chan + " :End of /NAMES list.\r\n";
-	send(client_s, reply.c_str(), reply.size() + 1, 0);
+		param += " " + serv->_channels[chan]->_members[i].get_nickname();
+	numerical_message(*serv, client_s, 353, param);
+
+	param = chan + " :End of /NAMES list.";
+	numerical_message(*serv, client_s, 366, param);
 }
 
 void	Command::join(std::vector<std::string> &vc, int client_socket) {
-	int			target_s;
-	std::string	reply;
+// 	int			target_s;
+	std::string	msg;
 
 	if (vc.size() == 1 || vc.size() > 3)
 		std::cout << "Not enough parameters or too many paramaters\n";
@@ -83,13 +80,8 @@ void	Command::join(std::vector<std::string> &vc, int client_socket) {
 				if (check_key_error(this->_ircserv, vc, client_socket)) {
 					this->_ircserv->_channels[vc[1]]->_members.push_back(*this->_ircserv->_clients[client_socket]);
 					// SUCCESS
-					for (std::vector<Client>::iterator it = this->_ircserv->_channels[vc[1]]->_members.begin();\
-					it != this->_ircserv->_channels[vc[1]]->_members.end(); it++) {
-						reply = "\r\n:" + this->_ircserv->_clients[client_socket]->get_nickname() + " JOIN " + ":" + vc[1] + "\r\n";
-						target_s = target_socket(it->get_nickname(), this->_ircserv->_clients);
-						if (send(target_s, reply.c_str(), reply.size() + 1, 0) < 0)
-							std::cout << "JOIN MESSAGE IS NOT SENT TO THE MEMBERS OF THE CHANNEL\n";
-					}
+					msg = "\r\n:" + this->_ircserv->_clients[client_socket]->get_nickname() + " JOIN " + ":" + vc[1] + "\r\n";
+					forward_to_chan(*_ircserv, vc[1], msg, client_socket, true);
 					// send to the client that just joined the channel the TOPIC, if there is any, then send to him the list of the members
 					send_members_list(this->_ircserv, vc[1],  client_socket);
 				}
