@@ -1,2 +1,8 @@
 - the hostname (or prefix) doesn't get displayed when someone joins a channel
 - test private msg from user to user
+
+
+- The private message is working even if it seems that it's not, you can view
+  the messages via /query <target> command
+- There is a problem in the invite command, make sure it transmits the
+  correct messages...
