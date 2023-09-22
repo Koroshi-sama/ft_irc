@@ -38,12 +38,12 @@ bool	check_kick_req(std::vector<std::string>& vc, int client_s, ircserv& serv) {
 	std::string	client_nick = socket_nickname(serv, client_s);
 
 	if (serv._channels.find(vc[1]) == serv._channels.end())
-		return (std::cout << "CHANNEL NOT FOUND\n", false);
+		return (send_error(401, client_nick, client_s, vc[1], "No such nick/channel"), false);
 	// maybe should also check if client is not in channel
 	if (!client_in_chan(serv, vc[1], client_nick, 0))
 		return (send_error(482, client_nick, client_s, vc[1], " You're not a channel operator"), false);
 	if (!client_in_chan(serv, vc[1], vc[2], -1))
-		return (std::cout << "TARGET (user to be kicked) IS NOT FOUND\n", false);
+		return (send_error(401, client_nick, client_s, vc[1], "No such nick/channel"), false);
 	return true;
 }
 
