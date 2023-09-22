@@ -46,14 +46,14 @@ void	send_members_list(ircserv* serv, std::string chan, int client_s) {
 	std::string	reply;
 
 	// "=" char denotes that the channel is public, when it's not?
-	reply = "353\r\n:" + serv->_clients[client_s]->get_hostname() + " 353 " + serv->_clients[client_s]->get_nickname() + " = " + chan + " :";
+	reply = "\r\n:" + serv->_clients[client_s]->get_hostname() + " 353 " + serv->_clients[client_s]->get_nickname() + " = " + chan + " :";
 	std::cout << "{" << serv->_clients[client_s]->get_hostname() << "}\n";
 	reply += "@" + serv->_channels[chan]->_members[0].get_nickname();
 	for (unsigned int i = 1; i < serv->_channels[chan]->_members.size(); i++)
 		reply += " " + serv->_channels[chan]->_members[i].get_nickname();
 	reply += "\r\n";
 	send(client_s, reply.c_str(), reply.size() + 1, 0);
-	reply = "366\r\n:" + serv->_clients[client_s]->get_hostname() + " 366 " + serv->_clients[client_s]->get_nickname() + " " + chan + " :End of /NAMES list.\r\n";
+	reply = "\r\n:" + serv->_clients[client_s]->get_hostname() + " 366 " + serv->_clients[client_s]->get_nickname() + " " + chan + " :End of /NAMES list.\r\n";
 	send(client_s, reply.c_str(), reply.size() + 1, 0);
 }
 
