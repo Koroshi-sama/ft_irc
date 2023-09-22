@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:18 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/21 15:45:47 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/22 11:05:51 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ Command::Command(ircserv *ircserv): _ircserv(ircserv) {
     _commands["WHOIS"] = &Command::whois;
     _commands["MODE"] = &Command::mode;
     _commands["KICK"] = &Command::kick;
+    _commands["INVITE"] = &Command::invite;
 }
 
 Command::~Command() {}
