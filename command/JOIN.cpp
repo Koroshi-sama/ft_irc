@@ -43,13 +43,16 @@ void	create_chan_add_cl(ircserv *serv, std::string chan, int client_s) {
 }
 
 void	send_members_list(ircserv* serv, std::string chan, int client_s) {
-	std::string	reply;
-	std::string	param;
+	std::string		reply;
+	std::string		param;
+	unsigned int	op_n;
 
+	op_n = serv->_channels[chan]->_operators_n;
 	// "=" char denotes that the channel is public, when it's not?
 	param = "= " + chan + " :";
-	param += "@" + serv->_channels[chan]->_members[0].get_nickname();
-	for (unsigned int i = 1; i < serv->_channels[chan]->_members.size(); i++)
+	for (unsigned int i = 0; i < op_n; i++)
+		param += "@" + serv->_channels[chan]->_members[i].get_nickname();
+	for (unsigned int i = op_n; i < serv->_channels[chan]->_members.size(); i++)
 		param += " " + serv->_channels[chan]->_members[i].get_nickname();
 	numerical_message(*serv, client_s, 353, param);
 
