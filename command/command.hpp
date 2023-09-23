@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:14 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/22 16:56:30 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/23 11:49:22 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ class Command {
         void mode(std::vector<std::string> &vc, int client_socket);
         void kick(std::vector<std::string> &vc, int client_socket);
         void invite(std::vector<std::string> &vc, int client_socket);
+        void topic(std::vector<std::string> &vc, int client_socket);
 };
 
 // the following 2 functions do opposite operations, the first takes a nickname and returns
