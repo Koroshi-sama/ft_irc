@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 18:30:13 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/23 11:38:49 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/23 11:41:01 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,9 @@ void	mode_user_limit() {}
 
 void Command::mode(std::vector<std::string> &vc, int client_socket) {
     char	mode = vc[2][1];        // could be i | l...
-	char	action = vc[2][0];      // could be - | + 
+// 	char	action = vc[2][0];      // could be - | + 
 
+	(void)client_socket;
 	switch (mode) {
 		case ('i'):
 			mode_invite_only();
@@ -41,4 +42,5 @@ void Command::mode(std::vector<std::string> &vc, int client_socket) {
 			break ;
 		case ('l'):
 			mode_user_limit();
+	}
 }
