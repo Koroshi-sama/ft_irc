@@ -20,6 +20,10 @@ bool	Channel::get_invite_bool() const {
 	return _is_invite_only;
 }
 
+void	Channel::set_invite_bool(bool v) {
+	_is_invite_only = v;
+}
+
 bool	Channel::get_user_limit_bool() const {
 	return (_user_limit < 0) ? false : true;
 }
