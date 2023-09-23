@@ -13,7 +13,8 @@ Channel::Channel(std::string ch_name) {
 Channel::~Channel() {}
 
 bool	Channel::get_key_bool() const {
-	return !_key.empty();
+// 	return !_key.empty();
+	return _key_authentification;
 }
 
 bool	Channel::get_invite_bool() const {
@@ -45,6 +46,10 @@ void	Channel::set_key(std::string key){
 	_key = key;
 }
 
+void	Channel::set_key_bool(bool v){
+	_key_authentification = v;
+}
+
 bool	Channel::get_topic_op_bool() const {
 	return _is_topic_op_only;
 }
@@ -63,4 +68,12 @@ std::string	Channel::get_topic_setter() const {
 
 std::time_t	Channel::get_topic_time() const {
 	return _topic_time;
+}
+
+void	Channel::set_user_limit_bool(bool v) {
+	_user_limit_bool = v;
+}
+
+void	Channel::set_topic_op_bool(bool v) {
+	_is_topic_op_only = v;
 }

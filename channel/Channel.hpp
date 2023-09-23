@@ -9,6 +9,7 @@ private:
 	bool				_key_authentification;
 	bool				_is_invite_only;
 	bool				_is_topic_op_only;
+	bool				_user_limit_bool;
 	int					_user_limit;
 	std::string			_key;
 	std::string			_topic;
