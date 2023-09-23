@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 18:30:13 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/23 21:02:18 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/23 21:36:08 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,11 @@ void	mode_key(ircserv& serv, std::vector<std::string>& vc, int client_s,
 	std::cout << "Mode Key function\n";
 }
 
-void	mode_op_privileges() {}
+/* look for the exact behavior of mode +/-o, arguments... compare the behavior
+   in inspird server and compare it with other servers
+*/
+void	mode_op_privileges() {
+}
 
 void	mode_user_limit() {}
 
