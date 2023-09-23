@@ -23,7 +23,9 @@ public:
 	std::string		get_channel_name() const;
 	unsigned int	get_current_members_n() const;
 	std::string		get_key() const;
+	void			set_key(std::string);
 	std::string		get_topic() const;
+	void			set_topic(std::string);
 
 	bool			get_key_bool() const;
 	bool			get_invite_bool() const;

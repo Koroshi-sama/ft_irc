@@ -31,3 +31,11 @@ bool	Channel::is_channel_full() const {
 std::string	Channel::get_topic() const {
 	return _topic;
 }
+
+void	Channel::set_topic(std::string topic){
+	_topic = topic;
+}
+
+void	Channel::set_key(std::string key){
+	_key = key;
+}
