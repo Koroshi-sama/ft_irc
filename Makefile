@@ -6,7 +6,7 @@
 #    By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/05 10:28:43 by aerrazik          #+#    #+#              #
-#    Updated: 2023/09/22 16:56:49 by atouba           ###   ########.fr        #
+#    Updated: 2023/09/23 15:21:58 by atouba           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ SRC =	main.cpp \
 		command/MODE.cpp \
 		command/KICK.cpp \
 		command/INVITE.cpp \
+		command/TOPIC.cpp \
 		command/send.cpp
 
 OBJS = $(SRC:.cpp=.o)

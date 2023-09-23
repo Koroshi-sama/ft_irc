@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:18 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/23 11:14:35 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/23 15:41:10 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ Command::Command(ircserv *ircserv): _ircserv(ircserv) {
     _commands["KICK"] = &Command::kick;
     _commands["INVITE"] = &Command::invite;
     _commands["MODE"] = &Command::mode;
+    _commands["TOPIC"] = &Command::topic;
 }
 
 Command::~Command() {}
