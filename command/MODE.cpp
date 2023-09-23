@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 18:30:13 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/23 19:46:46 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/23 21:02:18 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	mode_topic(ircserv& serv, std::string chan, int client_s,
 	bool		value = (action == '+') ? true : false;
 
 	serv._channels[chan]->set_topic_op_bool(value);
-// 	command_message(serv, client_s, "MODE", chan + " " + action + "i");
 
 	msg = "\r\n:" + serv._clients[client_s]->get_nickname() +
 		  "!" + serv._clients[client_s]->get_username() +
@@ -41,10 +40,6 @@ void	mode_topic(ircserv& serv, std::string chan, int client_s,
 	forward_to_chan(serv, chan, msg, client_s, true);
 	std::cout << "Mode Topic function\n";
 }
-
-/*
-if action == -  and t
-*/
 
 // void	mode_key(ircserv& serv, std::vector<std::string> vc, int client_s,
 void	mode_key(ircserv& serv, std::vector<std::string>& vc, int client_s,
@@ -71,13 +66,6 @@ void	mode_key(ircserv& serv, std::vector<std::string>& vc, int client_s,
 	  "!" + serv._clients[client_s]->get_username() +
 	  "@localhost MODE " + vc[1] + " " + action + "k " +
 	  vc[3] + "\r\n";
-// 	else {
-// 		serv._channels[vc[1]]->set_key(vc[3]);
-// 		msg = "\r\n:" + serv._clients[client_s]->get_nickname() +
-// 		  "!" + serv._clients[client_s]->get_username() +
-// 		  "@localhost MODE " + vc[1] + " " + action + "k " +
-// 		  vc[3] + "\r\n";
-// 	}
 
 	forward_to_chan(serv, vc[1], msg, client_s, true);
 	std::cout << "Mode Key function\n";
@@ -108,7 +96,6 @@ bool	check_mode_req(ircserv& serv, std::string chan, int client_s) {
 void Command::mode(std::vector<std::string> &vc, int client_socket) {
 // ----------------------------------------------------------------
 	std::cout << "Mooooooode" << vc[1] << client_socket << std::endl;
-    // Client *client = _ircserv->_clients[client_socket];
 
 	if (vc.size() == 2) {
 		std::string replay = "221 RPL_UMODEIS\r\n";
