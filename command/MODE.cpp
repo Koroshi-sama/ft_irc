@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 18:30:13 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/23 18:34:20 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/23 19:46:46 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,61 @@ void	mode_invite_only(ircserv& serv, std::string chan, int client_s,
 	std::cout << "Mode Invite Only function\n";
 }
 
-void	mode_topic() {
-	
+void	mode_topic(ircserv& serv, std::string chan, int client_s,
+							char action) {
+	std::string	msg;
+	bool		value = (action == '+') ? true : false;
+
+	serv._channels[chan]->set_topic_op_bool(value);
+// 	command_message(serv, client_s, "MODE", chan + " " + action + "i");
+
+	msg = "\r\n:" + serv._clients[client_s]->get_nickname() +
+		  "!" + serv._clients[client_s]->get_username() +
+		  "@localhost MODE " + chan + " " + action + "t\r\n";
+	forward_to_chan(serv, chan, msg, client_s, true);
+	std::cout << "Mode Topic function\n";
 }
 
-void	mode_key() {}
+/*
+if action == -  and t
+*/
+
+// void	mode_key(ircserv& serv, std::vector<std::string> vc, int client_s,
+void	mode_key(ircserv& serv, std::vector<std::string>& vc, int client_s,
+							char action) {
+	std::string	msg;
+	std::string	current_key = serv._channels[vc[1]]->get_key();
+	bool		value = (action == '+') ? true : false;
+
+	if (vc.size() != 4) return ;
+
+	if (
+		(action == '+' && !current_key.empty()) ||
+		(action == '-' && current_key.compare(vc[3]))
+	   )
+	   return ;
+	
+	serv._channels[vc[1]]->set_key_bool(value);
+	if (action == '-')
+		serv._channels[vc[1]]->set_key("");
+	else
+		serv._channels[vc[1]]->set_key(vc[3]);
+
+	msg = "\r\n:" + serv._clients[client_s]->get_nickname() +
+	  "!" + serv._clients[client_s]->get_username() +
+	  "@localhost MODE " + vc[1] + " " + action + "k " +
+	  vc[3] + "\r\n";
+// 	else {
+// 		serv._channels[vc[1]]->set_key(vc[3]);
+// 		msg = "\r\n:" + serv._clients[client_s]->get_nickname() +
+// 		  "!" + serv._clients[client_s]->get_username() +
+// 		  "@localhost MODE " + vc[1] + " " + action + "k " +
+// 		  vc[3] + "\r\n";
+// 	}
+
+	forward_to_chan(serv, vc[1], msg, client_s, true);
+	std::cout << "Mode Key function\n";
+}
 
 void	mode_op_privileges() {}
 
@@ -68,8 +118,10 @@ void Command::mode(std::vector<std::string> &vc, int client_socket) {
 
 // ---------------------------------------------------------------
 
-	if (vc[2].size() != 2)
+	if (vc[2].size() != 2 || (vc[2][0] != '+' && vc[2][0] != '-')) {
 		std::cout << "mode chars are Missing!!!!\n"; 
+		return ;
+	}
     char	mode = vc[2][1];        // could be i | l...
 	char	action = vc[2][0];      // could be - | + 
 
@@ -82,10 +134,10 @@ void Command::mode(std::vector<std::string> &vc, int client_socket) {
 			mode_invite_only(*_ircserv, vc[1], client_socket, action);
 			break ;
 		case ('t'):
-			mode_topic();
+			mode_topic(*_ircserv, vc[1], client_socket, action);
 			break ;
 		case ('k'):
-			mode_key();
+			mode_key(*_ircserv, vc, client_socket, action);
 			break ;
 		case ('o'):
 			mode_op_privileges();
