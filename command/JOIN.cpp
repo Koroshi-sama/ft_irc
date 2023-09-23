@@ -61,6 +61,7 @@ void	Command::join(std::vector<std::string> &vc, int client_socket) {
 // 	int			target_s;
 	std::string	msg;
 	Client		client;
+	std::string	chan_topic;
 
 	if (vc.size() == 1 || vc.size() > 3)
 		std::cout << "Not enough parameters or too many paramaters\n";
@@ -75,6 +76,10 @@ void	Command::join(std::vector<std::string> &vc, int client_socket) {
 				this->_ircserv->_channels.end()) {
 				// create channel and add user (operator)
 				create_chan_add_cl(this->_ircserv, vc[1], client_socket);
+				chan_topic = _ircserv->_channels[vc[1]]->get_topic();
+				if (!chan_topic.empty())
+					numerical_message(*_ircserv, client_socket, 332, 
+										vc[1] + " :" + chan_topic);
 				send_members_list(this->_ircserv, vc[1],  client_socket);
 			}
 			else {
@@ -91,8 +96,11 @@ void	Command::join(std::vector<std::string> &vc, int client_socket) {
 					msg = "\r\n:" + client.get_nickname() + " JOIN " 
 							+ ":" + vc[1] + "\r\n";
 					forward_to_chan(*_ircserv, vc[1], msg, client_socket, true);
-					/*// send to the client that just joined the channel the TOPIC, \
-						if there is any, then send to him the list of the members*/
+					chan_topic = _ircserv->_channels[vc[1]]->get_topic();
+					if (!chan_topic.empty())
+						numerical_message(*_ircserv, client_socket, 332, 
+											vc[1] + " :" + chan_topic);
+					// maybe should also send the time of topic creation?
 					send_members_list(this->_ircserv, vc[1],  client_socket);
 				}
 			}
