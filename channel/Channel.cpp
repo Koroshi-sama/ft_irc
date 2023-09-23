@@ -17,6 +17,11 @@ bool	Channel::get_key_bool() const {
 	return _key_authentification;
 }
 
+std::string	Channel::get_key() const {
+// 	return !_key.empty();
+	return _key;
+}
+
 bool	Channel::get_invite_bool() const {
 	return _is_invite_only;
 }
