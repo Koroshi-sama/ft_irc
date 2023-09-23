@@ -4,6 +4,7 @@ Channel::Channel(std::string ch_name) {
 	_channel_name = ch_name;
 	_key_authentification = false;
 	_is_invite_only = false;
+	_is_topic_op_only = true;
 	_user_limit = -1;
 	_operators_n = 0;
 	_default_kick_msg = "You're so fucking annoying";
@@ -38,4 +39,20 @@ void	Channel::set_topic(std::string topic){
 
 void	Channel::set_key(std::string key){
 	_key = key;
+}
+
+bool	Channel::get_topic_op_bool() const {
+	return _is_topic_op_only;
+}
+
+void	Channel::set_topic_setter(std::string setter) {
+	_topic_setter = setter;
+}
+
+std::string	Channel::get_topic_setter() const {
+	return _topic_setter;
+}
+
+std::time_t	Channel::get_topic_time() const {
+	return _topic_time;
 }

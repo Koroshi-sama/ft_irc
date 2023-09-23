@@ -8,9 +8,13 @@ class Channel {
 private:
 	bool				_key_authentification;
 	bool				_is_invite_only;
+	bool				_is_topic_op_only;
 	int					_user_limit;
 	std::string			_key;
 	std::string			_topic;
+	std::string			_topic_setter;
+	std::time_t			_topic_time;
+
 
 public:
 	std::string			_channel_name;
@@ -26,10 +30,16 @@ public:
 	void			set_key(std::string);
 	std::string		get_topic() const;
 	void			set_topic(std::string);
+	void			set_topic_setter(std::string);
+	void			set_topic_time(std::time_t);
+
+	std::string		get_topic_setter() const;
+	std::time_t		get_topic_time() const;
 
 	bool			get_key_bool() const;
 	bool			get_invite_bool() const;
 	bool			get_user_limit_bool() const;
+	bool			get_topic_op_bool() const;
 
 	bool			is_channel_full() const;
 
