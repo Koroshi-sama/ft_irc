@@ -49,6 +49,10 @@ void	Channel::set_topic_setter(std::string setter) {
 	_topic_setter = setter;
 }
 
+void	Channel::set_topic_time(std::time_t t) {
+	_topic_setter = t;
+}
+
 std::string	Channel::get_topic_setter() const {
 	return _topic_setter;
 }
