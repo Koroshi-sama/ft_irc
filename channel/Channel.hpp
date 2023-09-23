@@ -23,6 +23,7 @@ public:
 	std::string		get_channel_name() const;
 	unsigned int	get_current_members_n() const;
 	std::string		get_key() const;
+	std::string		get_topic() const;
 
 	bool			get_key_bool() const;
 	bool			get_invite_bool() const;

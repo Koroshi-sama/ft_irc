@@ -27,3 +27,7 @@ bool	Channel::is_channel_full() const {
 	int		members_n = _members.size();
 	return members_n == _user_limit;
 }
+
+std::string	Channel::get_topic() const {
+	return _topic;
+}
