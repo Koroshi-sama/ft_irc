@@ -10,6 +10,7 @@ private:
 	bool				_is_invite_only;
 	int					_user_limit;
 	std::string			_key;
+	std::string			_topic;
 
 public:
 	std::string			_channel_name;
