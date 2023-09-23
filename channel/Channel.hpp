@@ -24,22 +24,28 @@ public:
 
 	Channel(std::string);
 	~Channel();
+
 	std::string		get_channel_name() const;
 	unsigned int	get_current_members_n() const;
 	std::string		get_key() const;
-	void			set_key(std::string);
 	std::string		get_topic() const;
-	void			set_topic(std::string);
-	void			set_topic_setter(std::string);
-	void			set_topic_time(std::time_t);
-
 	std::string		get_topic_setter() const;
 	std::time_t		get_topic_time() const;
-
 	bool			get_key_bool() const;
 	bool			get_invite_bool() const;
 	bool			get_user_limit_bool() const;
 	bool			get_topic_op_bool() const;
+
+	void			set_key(std::string);
+	void			set_topic(std::string);
+	void			set_topic_setter(std::string);
+	void			set_topic_time(std::time_t);
+
+	void			set_key_bool(bool);
+	void			set_invite_bool(bool);
+	void			set_user_limit_bool(bool);
+	void			set_topic_op_bool(bool);
+
 
 	bool			is_channel_full() const;
 
