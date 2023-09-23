@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:38 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/19 09:16:14 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/23 11:56:27 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ class ircserv
         int     get_port() const ;
         std::string get_creation_time() const;
         void    sendNumericReply(int clientSocket, std::string replay);
+
+        struct pollfd fds[MAX_NUMB_CLIENTS];
     
     private:
         int     _port;

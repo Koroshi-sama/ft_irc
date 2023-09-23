@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:18 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/21 12:41:17 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/23 11:49:09 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,16 @@ void Command::pass(std::vector<std::string> &vc, int client_socket) {
 }
 
 void Command::quit(std::vector<std::string> &vc, int client_socket) {
-    std::cout << "Quuuuuuit" << vc[1] << client_socket << std::endl;
+    std::cout << "Quuuuuuit" << client_socket << std::endl;
     // It should delete the client that has quit the client and send a message to all the clients in the same channel
     Client *client = _ircserv->_clients[client_socket];
-    std::string reply = "ERROR :Closing Link: " + client->get_nickname() + " (" + vc[1] + ")\r\n";
+    std::string second_vs = "";
+    if (vc.size() > 1) {
+        second_vs = vc[1];
+    }
+    std::string reply = "ERROR :Closing Link: " + client->get_nickname() + " (" + second_vs + ")\r\n";
     send(client_socket, reply.c_str(), reply.size(), 0);
-    close(client_socket);
+    // close(client_socket);
     _ircserv->_clients.erase(client_socket);
 
 }

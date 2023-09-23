@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:31:40 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/08 17:12:15 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/23 11:37:53 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <algorithm>
+#include <fcntl.h>
 
 #include <ctime>
 
