@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 15:49:04 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/24 14:02:25 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/24 21:40:51 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,18 @@ void Command::nick(std::vector<std::string> &vc, int client_socket) {
         send(client_socket, reply.c_str(), reply.size(), 0);
     }
     else if (!check_nickname(vc[1])) {
-        if (!client->get_nickname().empty()) {
-            std::string reply = "433 ERR_NICKNAMEINUSE\r\n" + vc[1] + ":Nickname is already in use\r\n";
+        if (client->get_nickname() == "") {
+            std::string nickname = vc[1] + "_";
+            while (!check_nickname(nickname)) {
+                nickname += "_";
+            }
+            client->set_nickname(nickname);
+            std::cout << "Nickname changed to " << client->get_nickname() << std::endl;
+        } else {
+            std::string reply = "433 ERR_NICKNAMEINUSE\r\n";
             send(client_socket, reply.c_str(), reply.size(), 0);
         }
         // add an underscore to the nickname and then check if it exists if no set it as the new nickname if yes add an other underscore and so on
-        std::string nickname = vc[1] + "_";
-        while (!check_nickname(nickname)) {
-            nickname += "_";
-        }
-        client->set_nickname(nickname);
-        std::cout << "Nickname changed to " << client->get_nickname() << std::endl;
     }
     else
     {
