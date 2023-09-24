@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 15:06:39 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/21 10:48:24 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/24 13:36:02 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ class Client {
         Client(const Client &client);
         Client &operator=(const Client &client);
         ~Client();
+
+		std::vector<std::string>	invited_channels;
 
         std::string get_nickname() const ;
         std::string get_username() const ;
