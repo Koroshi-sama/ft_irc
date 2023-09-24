@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:29:30 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/24 18:22:11 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/24 20:21:48 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,9 @@ int    ircserv::remove_client(int i, int countClients) {
             std::vector<Client*>::iterator it2 = it->second->_members.begin();
             for (; it2 != it->second->_members.end(); it2++) {
                 if (_clients[client_socket]->get_nickname() == (*it2)->get_nickname()) {
+                    // Set the quitting message and forward it to the channel. The message should be liek this :Bruyne!b@localhost PART #toto
+                    std::string msg = "\r\n:" + _clients[client_socket]->get_nickname() + "!" + _clients[client_socket]->get_username() + "@localhost QUIT " + it->first + "\r\n";
+                    forward_to_chan(*this, it->first, msg, client_socket, false);
                     it->second->_members.erase(it2);
                     break ;
                 }

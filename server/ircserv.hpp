@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:38 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/23 21:18:34 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/24 20:20:36 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,7 @@ class ircserv
         std::string _password;
         std::string creation_time;
 };
+
+void	forward_to_chan(ircserv& serv, std::string chan, std::string msg, int client_s, bool requester_included);
 
 #endif
