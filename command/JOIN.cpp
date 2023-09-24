@@ -10,6 +10,7 @@ std::string	reply(std::string client_nickname,
 
 bool	check_key_error(ircserv* serv, std::vector<std::string> &vc,
 						int client_socket) {
+
 	(void)client_socket;
 	if (!serv->_channels[vc[1]]->get_key_bool())
 		return true;
@@ -36,6 +37,7 @@ void	create_chan_add_cl(ircserv *serv, std::string chan, int client_s) {
 	serv->_channels.insert(std::pair<std::string, Channel*>(chan, new Channel(chan)));
 	serv->_channels[chan]->_members.push_back(*serv->_clients[client_s]);
 	serv->_channels[chan]->_operators_n = 1;
+	serv->_clients[client_s]->set_channel(chan);
 
 	reply = "\r\n:" + serv->_clients[client_s]->get_nickname() +
 			" JOIN " + chan + "\r\n";
@@ -95,6 +97,7 @@ void	Command::join(std::vector<std::string> &vc, int client_socket) {
 				if (check_key_error(this->_ircserv, vc, client_socket)) {
 					client = *this->_ircserv->_clients[client_socket];
 					this->_ircserv->_channels[vc[1]]->_members.push_back(client);
+					this->_ircserv->_clients[client_socket]->set_channel(vc[1]);
 					// SUCCESS
 					msg = "\r\n:" + client.get_nickname() + " JOIN " 
 							+ ":" + vc[1] + "\r\n";
