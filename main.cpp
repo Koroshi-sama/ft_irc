@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:32 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/20 14:23:23 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/22 08:55:57 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ int main(int ac, char **av) {
                 
             }
             for (int i = 1; i <= countClients; i++) {
-                std::cout << "---------" << countClients << std::endl;
+//                 std::cout << "---------" << countClients << std::endl;
                 if (fds[i].revents && POLLIN) {
-                    std::cout << "----> Entered if fds <----" << std::endl;
+//                     std::cout << "----> Entered if fds <----" << std::endl;
                     // Receive message from client: buffer that will contain the message, bytesReceived: number of bytes received, all this handled by recv() function.
                     char buffer[MAX_BUFFER];
                     memset(buffer, 0, sizeof(buffer));
