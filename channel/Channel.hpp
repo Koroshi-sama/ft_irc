@@ -45,6 +45,7 @@ public:
 	void			set_key_bool(bool);
 	void			set_invite_bool(bool);
 	void			set_user_limit_bool(bool);
+	void			set_user_limit(int);
 	void			set_topic_op_bool(bool);
 
 
