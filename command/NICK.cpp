@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 15:49:04 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/21 12:40:34 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/23 20:05:48 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ bool Command::check_nickname(std::string nickname) {
 
 void Command::nick(std::vector<std::string> &vc, int client_socket) {
     Client *client = _ircserv->_clients[client_socket];
-    if (vc[1].empty() && _ircserv->_clients[client_socket]->get_nickname().empty()) {
+    if (vc.size() < 2) {
         std::string reply = std::string("431 ERR_NONICKNAMEGIVEN\r\n") + "No nickname given\r\n";
         send(client_socket, reply.c_str(), reply.size(), 0);
     }
@@ -67,6 +67,9 @@ void Command::nick(std::vector<std::string> &vc, int client_socket) {
             // :hhhh!aerrazik@localhost NICK hit
             std::string reply = "\r\n:" + old_nickname + "!" + client->get_username() + "@localhost NICK " + vc[1] + "\r\n";
             send(client_socket, reply.c_str(), reply.size(), 0);
+            if (client->get_channel() != "") {
+                
+            }
         }
-    } 
+    }
 }

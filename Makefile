@@ -6,24 +6,30 @@
 #    By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/05 10:28:43 by aerrazik          #+#    #+#              #
-#    Updated: 2023/09/21 12:31:55 by aerrazik         ###   ########.fr        #
+#    Updated: 2023/09/23 21:44:11 by aerrazik         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = c++
-GFC = -Wall -Werror -Wextra -std=c++98 #-g3 -fsanitize=address
+GFC = -Wall -Werror -Wextra -std=c++98 -g3 -fsanitize=address
 NAME = ircserv
 SRC =	main.cpp \
 		tools.cpp \
 		server/ircserv.cpp \
 		client/client.cpp \
 		client/client_init.cpp \
+		channel/Channel.cpp \
 		command/command.cpp \
 		command/NICK.cpp \
 		command/JOIN.cpp \
 		command/USER.cpp \
+		command/PRIVMSG.cpp \
 		command/WHOIS.cpp \
 		command/MODE.cpp \
+		command/KICK.cpp \
+		command/INVITE.cpp \
+		command/send.cpp \
+		command/PASS.cpp
 
 OBJS = $(SRC:.cpp=.o)
 

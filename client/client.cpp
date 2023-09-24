@@ -6,11 +6,12 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:29:30 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/19 10:30:15 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/23 12:24:24 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.hpp"
+#include "../server/ircserv.hpp"
 
 int    ircserv::accept_client() {
     sockaddr_in client;
@@ -39,7 +40,7 @@ void    ircserv::add_client(int clientSocket) {
     std::string ip = inet_ntoa(_addr.sin_addr);
 
     _clients[clientSocket] = new Client();
-    _clients[clientSocket]->set_hostname(ip);
+//     _clients[clientSocket]->set_hostname(ip);
     _clients[clientSocket]->set_status(OFFLINE);
 
     /**DEBUG MSG**/
@@ -48,10 +49,21 @@ void    ircserv::add_client(int clientSocket) {
     /**DEBUG MSG**/
 }
 
-void    ircserv::remove_client(int client_socket) {
-    if (_clients[client_socket]) {
-        delete _clients[client_socket];
-        _clients.erase(client_socket);
+int    ircserv::remove_client(int i, int countClients) {
+    int client_socket = fds[i].fd;
+
+    if (_clients[client_socket]->get_status() == HAS_QUITED) {
+        if (_clients[client_socket]) {
+            delete _clients[client_socket];
+            _clients.erase(client_socket);
+        }
+        close(fds[i].fd);
+        countClients--;
+        for (int j = i; j <= countClients; j++) {
+            fds[j] = fds[j + 1];
+        }
     }
+
+    return (countClients);
 }
 

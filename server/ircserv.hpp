@@ -6,19 +6,19 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:38 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/23 11:56:27 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/23 21:18:34 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef IRCSERV_HPP
 #define IRCSERV_HPP
 
-#include "../client/client.hpp"
 #include "../includes.hpp"
+#include "../channel/Channel.hpp"
 
 #define MAX_HOST 1025
 #define MAX_SERV 32
-#define MAX_NUMB_CLIENTS 10
+#define MAX_NUMB_CLIENTS 1024
 #define MAX_BUFFER 4096
 
 class Client;
@@ -26,7 +26,8 @@ class Client;
 class ircserv
 {
     public:
-        std::map<int, Client *> _clients;
+        std::map<int, Client *>			_clients;
+		std::map<std::string, Channel*>	_channels;
         ircserv();
         ircserv(int port, std::string password);
         ircserv(const ircserv &ircserv);
@@ -37,14 +38,13 @@ class ircserv
         int     accept_client();
         void    stop_server();
         void    add_client(int client_socket);
-        void    broadcast_message(int sender, std::string message);
-        void    remove_client(int client_socket);
+        int    remove_client(int i, int countClients);
         int     get_socket() const ;
         int     get_port() const ;
         std::string get_creation_time() const;
-        void    sendNumericReply(int clientSocket, std::string replay);
 
         struct pollfd fds[MAX_NUMB_CLIENTS];
+        int countClients;
     
     private:
         int     _port;

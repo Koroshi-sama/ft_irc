@@ -6,13 +6,13 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 22:36:24 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/19 16:28:16 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/23 17:55:33 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.hpp"
 
-Client::Client(): _nickname(""), _username(""), _realname(""), _status(0), _channel("") {}
+Client::Client(): _nickname(""), _username(""), _realname(""), _status(0), _channel(""), check_pass(0) {}
 
 Client::Client(const Client &client) {*this = client;}
 
@@ -50,6 +50,10 @@ void    Client::set_channel(std::string channel) {
     _channel = channel;
 }
 
+void    Client::set_check_pass(int check_pass) {
+    this->check_pass = check_pass;
+}
+
 std ::string    Client::get_nickname() const {
     return (_nickname);
 }
@@ -70,9 +74,16 @@ int    Client::get_status() const {
     return (_status);
 }
 
+int    Client::get_check_pass() const {
+    return (check_pass);
+}
+
 Client::~Client() {}
 
 std::string Client::get_channel() const {
     return (_channel);
 }
 
+std::string	Client::get_prefix() const {
+	return get_nickname() + "!" + get_username() + "@" + get_hostname();
+}
