@@ -66,6 +66,7 @@ bool	check_invite_req(std::vector<std::string>& vc, int client_s, ircserv& serv)
 }
 
 void	Command::invite(std::vector<std::string> &vc, int client_socket) {
+	int	target_s;
 	if (!check_invite_req(vc, client_socket, *_ircserv)) {
 		std::cout << "error in invite request\n";
 		return ;
@@ -88,4 +89,8 @@ void	Command::invite(std::vector<std::string> &vc, int client_socket) {
 		std::cout << "Invite command didn't get send to the target user\n";
 	// send success reply to the invite issuer
 	numerical_message(*_ircserv, client_socket, 341, vc[1] + " " + vc[2]);
+	// add this channel to the vector of channels the target user is invited on
+
+	target_s = target_socket(vc[1], _ircserv->_clients);
+	_ircserv->_clients[target_s]->invited_channels.push_back(vc[2]);
 }

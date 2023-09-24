@@ -5,6 +5,7 @@ Channel::Channel(std::string ch_name) {
 	_key_authentification = false;
 	_is_invite_only = false;
 	_is_topic_op_only = true;
+	_user_limit_bool = false;
 	_user_limit = -1;
 	_operators_n = 0;
 	_default_kick_msg = "You're so fucking annoying";
@@ -31,7 +32,8 @@ void	Channel::set_invite_bool(bool v) {
 }
 
 bool	Channel::get_user_limit_bool() const {
-	return (_user_limit < 0) ? false : true;
+// 	return (_user_limit < 0) ? false : true;
+ 	return _user_limit_bool;
 }
 
 bool	Channel::is_channel_full() const {
@@ -77,6 +79,10 @@ std::time_t	Channel::get_topic_time() const {
 
 void	Channel::set_user_limit_bool(bool v) {
 	_user_limit_bool = v;
+}
+
+void	Channel::set_user_limit(int limit) {
+	_user_limit = limit;
 }
 
 void	Channel::set_topic_op_bool(bool v) {
