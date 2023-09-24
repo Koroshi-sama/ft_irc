@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 18:30:13 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/24 13:15:46 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/24 15:45:38 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,12 @@ void	mode_key(ircserv& serv, std::vector<std::string>& vc, int client_s,
 	std::cout << "Mode Key function\n";
 }
 
-std::vector<Client>::iterator
-		member_index(std::vector<Client>& members, std::string nick) {
-	std::vector<Client>::iterator	it;
+std::vector<Client*>::iterator
+		member_index(std::vector<Client*>& members, std::string nick) {
+	std::vector<Client*>::iterator	it;
 
 	for (it = members.begin(); it != members.end(); it++) {
-		if (it->get_nickname().compare(nick) == 0)
+		if ((*it)->get_nickname().compare(nick) == 0)
 			return it;
 	}
 	return members.end();
@@ -103,9 +103,9 @@ bool	check_op_req(ircserv& serv, std::vector<std::string>& vc, char action) {
 
 void	mode_op_privileges(ircserv& serv, std::vector<std::string>& vc, int client_s,
 							char action) {
-	std::vector<Client>::iterator	member_pos;
-	std::vector<Client>::iterator	members_begin;
-	Client							member;
+	std::vector<Client*>::iterator	member_pos;
+	std::vector<Client*>::iterator	members_begin;
+	Client*							member;
 	std::string						msg;
 
 	if (!check_op_req(serv, vc, action)) {
@@ -121,8 +121,7 @@ void	mode_op_privileges(ircserv& serv, std::vector<std::string>& vc, int client_
 		serv._channels[vc[1]]->_members.insert(members_begin + 1, member);
 	}
 	else {
-		serv._channels[vc[1]]->_operators_n--;
-		member_pos = member_index(serv._channels[vc[1]]->_members, vc[3]);
+		serv._channels[vc[1]]->_operators_n--; member_pos = member_index(serv._channels[vc[1]]->_members, vc[3]);
 		member = *member_pos;
 		serv._channels[vc[1]]->_members.erase(member_pos);
 		serv._channels[vc[1]]->_members.push_back(member);

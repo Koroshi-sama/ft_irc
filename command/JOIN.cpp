@@ -35,7 +35,7 @@ void	create_chan_add_cl(ircserv *serv, std::string chan, int client_s) {
 	std::string	reply;
 
 	serv->_channels.insert(std::pair<std::string, Channel*>(chan, new Channel(chan)));
-	serv->_channels[chan]->_members.push_back(*serv->_clients[client_s]);
+	serv->_channels[chan]->_members.push_back(serv->_clients[client_s]);
 	serv->_channels[chan]->_operators_n = 1;
 	serv->_clients[client_s]->set_channel(chan);
 
@@ -53,9 +53,9 @@ void	send_members_list(ircserv* serv, std::string chan, int client_s) {
 	// "=" char denotes that the channel is public, when it's not?
 	param = "= " + chan + " :";
 	for (unsigned int i = 0; i < op_n; i++)
-		param += "@" + serv->_channels[chan]->_members[i].get_nickname();
+		param += "@" + serv->_channels[chan]->_members[i]->get_nickname();
 	for (unsigned int i = op_n; i < serv->_channels[chan]->_members.size(); i++)
-		param += " " + serv->_channels[chan]->_members[i].get_nickname();
+		param += " " + serv->_channels[chan]->_members[i]->get_nickname();
 	numerical_message(*serv, client_s, 353, param);
 
 	param = chan + " :End of /NAMES list.";
@@ -88,7 +88,7 @@ bool	check_join_req(ircserv& serv, std::vector<std::string> &vc, int client_s) {
 void	Command::join(std::vector<std::string> &vc, int client_socket) {
 // 	int			target_s;
 	std::string	msg;
-	Client		client;
+	Client*		client;
 	std::string	chan_topic;
 
 	if (vc.size() == 1 || vc.size() > 3)
@@ -115,11 +115,11 @@ void	Command::join(std::vector<std::string> &vc, int client_socket) {
 				if (!check_join_req(*this->_ircserv, vc, client_socket))
 					return ;
 				if (check_key_error(this->_ircserv, vc, client_socket)) {
-					client = *this->_ircserv->_clients[client_socket];
+					client = this->_ircserv->_clients[client_socket];
 					this->_ircserv->_channels[vc[1]]->_members.push_back(client);
 					this->_ircserv->_clients[client_socket]->set_channel(vc[1]);
 					// SUCCESS
-					msg = "\r\n:" + client.get_nickname() + " JOIN " 
+					msg = "\r\n:" + client->get_nickname() + " JOIN " 
 							+ ":" + vc[1] + "\r\n";
 					forward_to_chan(*_ircserv, vc[1], msg, client_socket, true);
 					chan_topic = _ircserv->_channels[vc[1]]->get_topic();
