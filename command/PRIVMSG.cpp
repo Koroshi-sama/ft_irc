@@ -40,6 +40,7 @@ void	forward_to_chan(ircserv& serv, std::string chan, std::string msg, int clien
 		if (!requester_included && target_socket(it->get_nickname(), serv._clients) == client_s)
 			continue ;
 		target_s = target_socket(it->get_nickname(), serv._clients);
+		std::cout << it->get_nickname() << " " << target_s << std::endl;
 		if (send(target_s, msg.c_str(), msg.size() + 1, 0) < 0)
 			std::cout << "THE MESSAGE IS NOT SENT TO A MEMBER IN THE CHANNEL\n";
 	}

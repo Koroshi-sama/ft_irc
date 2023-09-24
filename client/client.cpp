@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:29:30 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/23 12:24:24 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/24 13:00:34 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void    ircserv::add_client(int clientSocket) {
     std::string ip = inet_ntoa(_addr.sin_addr);
 
     _clients[clientSocket] = new Client();
-//     _clients[clientSocket]->set_hostname(ip);
+    _clients[clientSocket]->set_hostname(ip);
     _clients[clientSocket]->set_status(OFFLINE);
 
     /**DEBUG MSG**/
