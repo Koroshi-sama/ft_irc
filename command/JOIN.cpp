@@ -62,6 +62,29 @@ void	send_members_list(ircserv* serv, std::string chan, int client_s) {
 	numerical_message(*serv, client_s, 366, param);
 }
 
+bool	check_join_req(ircserv& serv, std::vector<std::string> &vc, int client_s) {
+	std::vector<std::string>			channels;
+	std::vector<std::string>::iterator	it;
+
+// 	if (serv._channels[vc[1]]->is_channel_full())
+		// send error
+	channels = serv._clients[client_s]->invited_channels;
+
+	std::cout << "Channels client is invited to: ";
+	for (size_t i = 0; i < channels.size(); i++)
+		std::cout << channels[i] << "  ";
+	std::cout << std::endl;
+
+	it = std::find(channels.begin(), channels.end(), vc[1]);
+	if (serv._channels[vc[1]]->get_invite_bool() &&
+		it == channels.end()) {
+			numerical_message(serv, client_s, 473,
+								vc[1] + " :Cannot join channel (+i)");
+			return false;
+	}
+	return true;
+}
+
 void	Command::join(std::vector<std::string> &vc, int client_socket) {
 // 	int			target_s;
 	std::string	msg;
@@ -89,11 +112,8 @@ void	Command::join(std::vector<std::string> &vc, int client_socket) {
 			}
 			else {
 				// channel exists
-				if (this->_ircserv->_channels[vc[1]]->is_channel_full())
-					// send error
-				if (this->_ircserv->_channels[vc[1]]->get_invite_bool()) {
-					// send error
-				}
+				if (!check_join_req(*this->_ircserv, vc, client_socket))
+					return ;
 				if (check_key_error(this->_ircserv, vc, client_socket)) {
 					client = *this->_ircserv->_clients[client_socket];
 					this->_ircserv->_channels[vc[1]]->_members.push_back(client);
