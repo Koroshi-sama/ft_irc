@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:18 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/24 10:29:29 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/24 12:54:13 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void Command::notice(std::vector<std::string> &vc, int client_socket) {
 void Command::ping(std::vector<std::string> &vc, int client_socket) {
     std::cout << "Piiiiiiiiing" << vc[1] << client_socket << std::endl;
     // Client *client = _ircserv->_clients[client_socket];
-    std::string reply = "\r\nPONG 127.0.0.1 :127.0.0.1\r\n";
+    std::string reply = "\r\nPONG :" + vc[1] + "\r\n";
     send(client_socket, reply.c_str(), reply.size(), 0);
 }
 

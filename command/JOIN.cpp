@@ -67,6 +67,7 @@ bool	check_chan_invite(ircserv& serv, std::vector<std::string> &vc, int client_s
 		return true;
 	channels = serv._clients[client_s]->invited_channels;
 
+	channels = serv._clients[client_s]->invited_channels;
 	std::cout << "Channels client is invited to: ";
 	for (size_t i = 0; i < channels.size(); i++)
 		std::cout << channels[i] << "  ";
