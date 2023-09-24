@@ -36,6 +36,7 @@ void	create_chan_add_cl(ircserv *serv, std::string chan, int client_s) {
 	serv->_channels.insert(std::pair<std::string, Channel*>(chan, new Channel(chan)));
 	serv->_channels[chan]->_members.push_back(*serv->_clients[client_s]);
 	serv->_channels[chan]->_operators_n = 1;
+	serv->_clients[client_s]->set_channel(chan);
 
 	reply = "\r\n:" + serv->_clients[client_s]->get_nickname() +
 			" JOIN " + chan + "\r\n";
@@ -43,13 +44,16 @@ void	create_chan_add_cl(ircserv *serv, std::string chan, int client_s) {
 }
 
 void	send_members_list(ircserv* serv, std::string chan, int client_s) {
-	std::string	reply;
-	std::string	param;
+	std::string		reply;
+	std::string		param;
+	unsigned int	op_n;
 
+	op_n = serv->_channels[chan]->_operators_n;
 	// "=" char denotes that the channel is public, when it's not?
 	param = "= " + chan + " :";
-	param += "@" + serv->_channels[chan]->_members[0].get_nickname();
-	for (unsigned int i = 1; i < serv->_channels[chan]->_members.size(); i++)
+	for (unsigned int i = 0; i < op_n; i++)
+		param += "@" + serv->_channels[chan]->_members[i].get_nickname();
+	for (unsigned int i = op_n; i < serv->_channels[chan]->_members.size(); i++)
 		param += " " + serv->_channels[chan]->_members[i].get_nickname();
 	numerical_message(*serv, client_s, 353, param);
 
@@ -92,6 +96,7 @@ void	Command::join(std::vector<std::string> &vc, int client_socket) {
 				if (check_key_error(this->_ircserv, vc, client_socket)) {
 					client = *this->_ircserv->_clients[client_socket];
 					this->_ircserv->_channels[vc[1]]->_members.push_back(client);
+					this->_ircserv->_clients[client_socket]->set_channel(vc[1]);
 					// SUCCESS
 					msg = "\r\n:" + client.get_nickname() + " JOIN " 
 							+ ":" + vc[1] + "\r\n";

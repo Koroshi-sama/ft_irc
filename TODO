@@ -6,3 +6,12 @@
   the messages via /query <target> command
 - There is a problem in the invite command, make sure it transmits the
   correct messages...
+
+? when the command needs more params, make sure the error returned is handled
+  by the irc client, because otherwise I'll have to return it?
+
+- I have to add something so that when a channel is invite only, and when a
+  user is invited, he can join, otherwise he can't ==> add a condition in
+  the join command
+
+- Check that the listing of operators (when an operator is added) is correct

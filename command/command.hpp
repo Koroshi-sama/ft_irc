@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:14 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/23 20:05:01 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/24 11:52:06 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ class Command {
         void mode(std::vector<std::string> &vc, int client_socket);
         void kick(std::vector<std::string> &vc, int client_socket);
         void invite(std::vector<std::string> &vc, int client_socket);
+        void topic(std::vector<std::string> &vc, int client_socket);
 };
 
 // the following 2 functions do opposite operations, the first takes a nickname and returns
@@ -66,7 +67,7 @@ std::string socket_nick(ircserv& serv, int client_s);
 bool		client_in_chan(ircserv& serv, std::string& chan, std::string client_nick, int range);
 void		send_error(int error, std::string client_nick, int client_s, std::string chan, std::string msg);
 void		forward_to_chan(ircserv& serv, std::string chan, std::string msg, int client_s, bool requester_included);
-
+void	    target_channel(int client_s, std::map<int, Client*> clients, std::string target, std::string buffer, ircserv& serv);
 void		command_message(ircserv& serv, int client_s, std::string command, 
 								std::string param);
 void		numerical_message(ircserv& serv, int client_s, int num,

@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 15:49:04 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/23 20:05:48 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/24 12:33:20 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,9 @@ void Command::nick(std::vector<std::string> &vc, int client_socket) {
             // :hhhh!aerrazik@localhost NICK hit
             std::string reply = "\r\n:" + old_nickname + "!" + client->get_username() + "@localhost NICK " + vc[1] + "\r\n";
             send(client_socket, reply.c_str(), reply.size(), 0);
+            std::cout << "Channel : " << client->get_channel() << std::endl;
             if (client->get_channel() != "") {
-                
+                forward_to_chan(*_ircserv, client->get_channel(), reply, client_socket, false);
             }
         }
     }
