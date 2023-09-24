@@ -6,12 +6,12 @@
 #    By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/05 10:28:43 by aerrazik          #+#    #+#              #
-#    Updated: 2023/09/23 15:21:58 by atouba           ###   ########.fr        #
+#    Updated: 2023/09/24 10:24:58 by aerrazik         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = c++
-GFC = -Wall -Werror -Wextra -std=c++98 #-g3 -fsanitize=address
+GFC = -Wall -Werror -Wextra -std=c++98 -g3 -fsanitize=address
 NAME = ircserv
 SRC =	main.cpp \
 		tools.cpp \
@@ -29,7 +29,8 @@ SRC =	main.cpp \
 		command/KICK.cpp \
 		command/INVITE.cpp \
 		command/TOPIC.cpp \
-		command/send.cpp
+		command/send.cpp \
+		command/PASS.cpp
 
 OBJS = $(SRC:.cpp=.o)
 

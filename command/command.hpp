@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:14 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/23 11:49:22 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/24 11:52:06 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "../server/ircserv.hpp"
 
 #define WELCOME 1
+#define PASSWORD 485
 
 class ircserv;
 class client;
@@ -38,7 +39,7 @@ class Command {
 //         std::map<std::string, std::vector<Client *> > _channels; // this shouldn't be added, since there is a map of channels in the _ircserv
 // >>>>>>> 33950d9
 
-        void parse_command(std::string command);
+        void parse_command(std::string command, int client_socket);
         bool check_nickname(std::string nickname);
 
         void nick(std::vector<std::string> &vc, int client_socket);
@@ -66,7 +67,7 @@ std::string socket_nick(ircserv& serv, int client_s);
 bool		client_in_chan(ircserv& serv, std::string& chan, std::string client_nick, int range);
 void		send_error(int error, std::string client_nick, int client_s, std::string chan, std::string msg);
 void		forward_to_chan(ircserv& serv, std::string chan, std::string msg, int client_s, bool requester_included);
-
+void	    target_channel(int client_s, std::map<int, Client*> clients, std::string target, std::string buffer, ircserv& serv);
 void		command_message(ircserv& serv, int client_s, std::string command, 
 								std::string param);
 void		numerical_message(ircserv& serv, int client_s, int num,

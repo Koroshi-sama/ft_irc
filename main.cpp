@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:32 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/22 08:55:57 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/24 15:07:26 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ int main(int ac, char **av) {
     // Create socket and bind it to port. Check ircserv.cpp for more info
     
     if (irc.start_server()) {
-        struct pollfd fds[MAX_NUMB_CLIENTS];
-        int countClients = 0;
-        fds[0].fd = irc.get_socket();
-        fds[0].events = POLLIN;
+        // struct pollfd fds[MAX_NUMB_CLIENTS];
+        irc.countClients = 0;
+        irc.fds[0].fd = irc.get_socket();
+        irc.fds[0].events = POLLIN;
         
         // While loop: Listen for incoming connections and handle them. The poll() function do the job of handling multiple clients at the same time.
         // Read about poll() or watch a video to understand how it works. "Events, Revents, POLLIN, ..."
@@ -35,60 +35,56 @@ int main(int ac, char **av) {
         Command command(&irc);
         
         while (true) {
-            int pollCount = poll(fds, countClients + 1, -1);
+            int pollCount = poll(irc.fds, irc.countClients + 1, -1);
             if (pollCount == -1) {
                 std::cerr << "Error: poll failed" << std::endl;
                 break;
             }
-            if (fds[0].revents && POLLIN) {
+            if (irc.fds[0].revents && POLLIN) {
                 // Accept new connection. Check client.cpp for accept_client() function.
                 int client_socket = irc.accept_client();
+                std::cout << "client_socket: " << client_socket << std::endl;
                 if (client_socket != -1) {
-                    countClients++;
-                    fds[countClients].fd = client_socket;
-                    fds[countClients].events = POLLIN;
+                    irc.countClients++;
+                    irc.fds[irc.countClients].fd = client_socket;
+                    irc.fds[irc.countClients].events = POLLIN;
+
+                    // set the socket to non-blocking mode
+                    fcntl(client_socket, F_SETFL, O_NONBLOCK);
                 }
                 
             }
-            for (int i = 1; i <= countClients; i++) {
-//                 std::cout << "---------" << countClients << std::endl;
-                if (fds[i].revents && POLLIN) {
-//                     std::cout << "----> Entered if fds <----" << std::endl;
+            for (int i = 1; i <= irc.countClients; i++) {
+                std::cout << "---------" << irc.countClients << std::endl;
+                if (irc.fds[i].revents && POLLIN) {
+                    std::cout << "----> Entered if irc.fds <----" << std::endl;
                     // Receive message from client: buffer that will contain the message, bytesReceived: number of bytes received, all this handled by recv() function.
                     char buffer[MAX_BUFFER];
                     memset(buffer, 0, sizeof(buffer));
-                    int bytesReceived = recv(fds[i].fd, buffer, sizeof(buffer), 0);
+                    int bytesReceived = recv(irc.fds[i].fd, buffer, sizeof(buffer), 0);
                     if (bytesReceived == -1) {
                         std::cerr << "Error reading from client" << std::endl;
-                        exit(1);
+                        irc.countClients = irc.remove_client(i, irc.countClients);
+                        break;
                     }
-                    else if (strcmp(buffer, "QUIT :leaving\r\n") == 0 || bytesReceived == 0) {
-                        // Remove client from the map and close the socket. Check client.cpp for remove_client() function.
-
-                        /**DEBUG MSG**/
-                        std::cout << "Client " << fds[i].fd << " disconnected" << std::endl;
-                        /**DEBUG MSG**/
-
-                        irc.remove_client(fds[i].fd);
-                        close(fds[i].fd);
-                        countClients--;
-                        for (int j = i; j <= countClients; j++) {
-                            fds[j] = fds[j + 1];
-                        }
+                    else if (bytesReceived == 0) {
+                        std::cout << "Client " << irc.fds[i].fd << " disconnectedddddddd" << std::endl;
+                        irc._clients[irc.fds[i].fd]->set_status(HAS_QUITED);
+                        irc.countClients = irc.remove_client(i, irc.countClients);
+                        break;
                     }
                     else {
-                        
                         /**DEBUG MSG**/
                         std::cout << "--------------------------------------------------------------" << std::endl;
-                        std::cout << "Received from client " << fds[i].fd << ": " << buffer << std::endl;
+                        std::cout << "Received from client " << irc.fds[i].fd << ": " << buffer << std::endl;
                         std::cout << "--------------------------------------------------------------" << std::endl;
                         /**DEBUG MSG**/
 
-                        command.handle_commands(buffer, fds[i].fd);
+                        command.handle_commands(buffer, irc.fds[i].fd);
+                        irc.countClients = irc.remove_client(i, irc.countClients);
                     }
                 }
             }
-
         }
         // Close the socket, stop the server. Check ircserv.cpp for stop_server() function.
         irc.stop_server();

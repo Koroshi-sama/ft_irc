@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:38 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/19 19:14:33 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/23 21:18:34 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 #define MAX_HOST 1025
 #define MAX_SERV 32
-#define MAX_NUMB_CLIENTS 10
+#define MAX_NUMB_CLIENTS 1024
 #define MAX_BUFFER 4096
 
 class Client;
@@ -38,12 +38,13 @@ class ircserv
         int     accept_client();
         void    stop_server();
         void    add_client(int client_socket);
-        void    broadcast_message(int sender, std::string message);
-        void    remove_client(int client_socket);
+        int    remove_client(int i, int countClients);
         int     get_socket() const ;
         int     get_port() const ;
         std::string get_creation_time() const;
-        void    sendNumericReply(int clientSocket, std::string replay);
+
+        struct pollfd fds[MAX_NUMB_CLIENTS];
+        int countClients;
     
     private:
         int     _port;

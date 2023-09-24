@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:18 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/23 15:41:10 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/24 10:29:29 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,10 @@ Command::~Command() {}
 
 void Command::handle_commands(std::string command, int client_socket) {
 	_buffer = command;
-    parse_command(command);
-    std::map<std::string, std::vector<std::string> >::iterator it = _params.begin();
-    for (; it != _params.end(); it++) {
-        if (_commands.find(it->first) != _commands.end()) {
-            (this->*_commands[it->first])(it->second, client_socket);
-        }
-    }
-    // clean _params map
-    _params.clear();
+    parse_command(command, client_socket);
 }
 
-void Command::parse_command(std::string command) {
+void Command::parse_command(std::string command, int client_socket) {
     command = strtrim(command);
     std::vector<std::string> provisory = split(command, '\n');
     std::vector<std::string>::iterator it = provisory.begin();
@@ -58,23 +50,28 @@ void Command::parse_command(std::string command) {
                 *it = strtrim(*it);
             }
             _params[tokens[0]] = tokens;
+            std::cout << "Command in the parsing funtcion: " << tokens[0] << std::endl;
+            if (_commands.find(tokens[0]) != _commands.end()) {
+                if (tokens[0] == "PASS" || _ircserv->_clients[client_socket]->get_check_pass() == PASSWORD) {
+                    (this->*_commands[tokens[0]])(tokens, client_socket);
+                }
+            }
         }
     }
-}
-
-void Command::pass(std::vector<std::string> &vc, int client_socket) {
-    std::cout << "Paaaaaass" << vc[1] << client_socket << std::endl;
+    _params.clear();
 }
 
 void Command::quit(std::vector<std::string> &vc, int client_socket) {
-    std::cout << "Quuuuuuit" << vc[1] << client_socket << std::endl;
+    std::cout << "Quuuuuuit" << client_socket << std::endl;
     // It should delete the client that has quit the client and send a message to all the clients in the same channel
     Client *client = _ircserv->_clients[client_socket];
-    std::string reply = "ERROR :Closing Link: " + client->get_nickname() + " (" + vc[1] + ")\r\n";
+    std::string second_vs = "";
+    if (vc.size() > 1) {
+        second_vs = vc[1];
+    }
+    std::string reply = "ERROR :Closing Link: " + client->get_nickname() + " (" + second_vs + ")\r\n";
     send(client_socket, reply.c_str(), reply.size(), 0);
-    close(client_socket);
-    _ircserv->_clients.erase(client_socket);
-
+    client->set_status(HAS_QUITED);
 }
 
 void Command::part(std::vector<std::string> &vc, int client_socket) {

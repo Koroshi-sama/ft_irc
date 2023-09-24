@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:29:30 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/21 11:54:11 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/23 12:24:24 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,21 @@ void    ircserv::add_client(int clientSocket) {
     /**DEBUG MSG**/
 }
 
-void    ircserv::remove_client(int client_socket) {
-    if (_clients[client_socket]) {
-        delete _clients[client_socket];
-        _clients.erase(client_socket);
+int    ircserv::remove_client(int i, int countClients) {
+    int client_socket = fds[i].fd;
+
+    if (_clients[client_socket]->get_status() == HAS_QUITED) {
+        if (_clients[client_socket]) {
+            delete _clients[client_socket];
+            _clients.erase(client_socket);
+        }
+        close(fds[i].fd);
+        countClients--;
+        for (int j = i; j <= countClients; j++) {
+            fds[j] = fds[j + 1];
+        }
     }
+
+    return (countClients);
 }
 
