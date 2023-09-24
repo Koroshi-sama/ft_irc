@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 18:30:13 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/24 13:03:00 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/24 13:15:46 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@ void	mode_invite_only(ircserv& serv, std::string chan, int client_s,
 	std::string	msg;
 	bool		value = (action == '+') ? true : false;
 
+	if (action == '+' && serv._channels[chan]->get_invite_bool())
+		return ;
+	if (action == '-' && !serv._channels[chan]->get_invite_bool())
+		return ;
 	serv._channels[chan]->set_invite_bool(value);
 // 	command_message(serv, client_s, "MODE", chan + " " + action + "i");
 
