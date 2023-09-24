@@ -9,17 +9,16 @@ Channel::Channel(std::string ch_name) {
 	_user_limit = -1;
 	_operators_n = 0;
 	_default_kick_msg = "You're so fucking annoying";
+	_key = "";
 }
 
 Channel::~Channel() {}
 
 bool	Channel::get_key_bool() const {
-// 	return !_key.empty();
-	return _key_authentification;
+	return !_key.empty();
 }
 
 std::string	Channel::get_key() const {
-// 	return !_key.empty();
 	return _key;
 }
 
@@ -34,6 +33,10 @@ void	Channel::set_invite_bool(bool v) {
 bool	Channel::get_user_limit_bool() const {
 // 	return (_user_limit < 0) ? false : true;
  	return _user_limit_bool;
+}
+
+int	Channel::get_user_limit() const {
+ 	return _user_limit;
 }
 
 bool	Channel::is_channel_full() const {

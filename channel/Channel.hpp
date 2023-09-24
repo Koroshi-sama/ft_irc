@@ -36,6 +36,7 @@ public:
 	bool			get_invite_bool() const;
 	bool			get_user_limit_bool() const;
 	bool			get_topic_op_bool() const;
+	int				get_user_limit() const;
 
 	void			set_key(std::string);
 	void			set_topic(std::string);
