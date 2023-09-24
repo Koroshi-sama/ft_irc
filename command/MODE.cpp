@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 18:30:13 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/23 21:36:08 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/24 10:21:12 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,62 @@ void	mode_key(ircserv& serv, std::vector<std::string>& vc, int client_s,
 	std::cout << "Mode Key function\n";
 }
 
+std::vector<Client>::iterator
+		member_index(std::vector<Client>& members, std::string nick) {
+	std::vector<Client>::iterator	it;
+
+	for (it = members.begin(); it != members.end(); it++) {
+		if (it->get_nickname().compare(nick) == 0)
+			return it;
+	}
+	return members.end();
+}
+
 /* look for the exact behavior of mode +/-o, arguments... compare the behavior
    in inspird server and compare it with other servers
 */
-void	mode_op_privileges() {
+void	mode_op_privileges(ircserv& serv, std::vector<std::string>& vc, int client_s,
+							char action) {
+	std::vector<Client>::iterator	member_pos;
+	std::vector<Client>::iterator	members_begin;
+	Client							member;
+	std::string						msg;
+
+	if (vc.size() != 4)
+		return ;
+
+	if (!client_in_chan(serv, vc[1], vc[3], -1))
+		return ;
+	if (action == '+' &&
+		client_in_chan(serv, vc[1], vc[3], 0))
+		return ;
+	if (action == '-' &&
+		!client_in_chan(serv, vc[1], vc[3], 0))
+		return ;
+	
+	if (action == '+') {
+		serv._channels[vc[1]]->_operators_n++;
+		member_pos = member_index(serv._channels[vc[1]]->_members, vc[3]);
+		member = *member_pos;
+		members_begin = serv._channels[vc[1]]->_members.begin();
+		serv._channels[vc[1]]->_members.erase(member_pos);
+		serv._channels[vc[1]]->_members.insert(members_begin + 1, member);
+	}
+	else {
+		serv._channels[vc[1]]->_operators_n--;
+		member_pos = member_index(serv._channels[vc[1]]->_members, vc[3]);
+		member = *member_pos;
+		serv._channels[vc[1]]->_members.erase(member_pos);
+		serv._channels[vc[1]]->_members.push_back(member);
+	}
+
+	msg = "\r\n:" + serv._clients[client_s]->get_nickname() +
+		  "!" + serv._clients[client_s]->get_username() +
+		  "@localhost MODE " + vc[1] + " " + action + "o " +
+		  vc[3] + "\r\n";
+
+	forward_to_chan(serv, vc[1], msg, client_s, true);
+	std::cout << "Mode Operator function\n";
 }
 
 void	mode_user_limit() {}
@@ -131,7 +183,7 @@ void Command::mode(std::vector<std::string> &vc, int client_socket) {
 			mode_key(*_ircserv, vc, client_socket, action);
 			break ;
 		case ('o'):
-			mode_op_privileges();
+			mode_op_privileges(*_ircserv, vc, client_socket, action);
 			break ;
 		case ('l'):
 			mode_user_limit();
