@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 15:06:39 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/24 15:09:16 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/24 20:20:27 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,7 @@ class Client {
         void set_channel(std::string channel);
 
 };
+
+
 
 #endif
