@@ -15,3 +15,8 @@
   the join command
 
 - Check that the listing of operators (when an operator is added) is correct
+
+- Check that invite is successful when a user is invited to an invite only 
+  channel.              V
+
+- Same thing with key.    
