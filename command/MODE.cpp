@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 18:30:13 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/24 10:21:12 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/24 10:42:13 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,21 @@ std::vector<Client>::iterator
 	return members.end();
 }
 
-/* look for the exact behavior of mode +/-o, arguments... compare the behavior
-   in inspird server and compare it with other servers
-*/
+bool	check_op_req(ircserv& serv, std::vector<std::string>& vc, char action) {
+	if (vc.size() != 4)
+		return false;
+
+	if (!client_in_chan(serv, vc[1], vc[3], -1))
+		return false;
+	if (action == '+' &&
+		client_in_chan(serv, vc[1], vc[3], 0))
+		return false;
+	if (action == '-' &&
+		!client_in_chan(serv, vc[1], vc[3], 0))
+		return false;
+	return true;
+}
+
 void	mode_op_privileges(ircserv& serv, std::vector<std::string>& vc, int client_s,
 							char action) {
 	std::vector<Client>::iterator	member_pos;
@@ -92,17 +104,9 @@ void	mode_op_privileges(ircserv& serv, std::vector<std::string>& vc, int client_
 	Client							member;
 	std::string						msg;
 
-	if (vc.size() != 4)
-		return ;
-
-	if (!client_in_chan(serv, vc[1], vc[3], -1))
-		return ;
-	if (action == '+' &&
-		client_in_chan(serv, vc[1], vc[3], 0))
-		return ;
-	if (action == '-' &&
-		!client_in_chan(serv, vc[1], vc[3], 0))
-		return ;
+	if (!check_op_req(serv, vc, action)) {
+		std::cout << "Error in operator function................\n";
+		return ;}
 	
 	if (action == '+') {
 		serv._channels[vc[1]]->_operators_n++;
