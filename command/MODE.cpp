@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 18:30:13 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/24 14:02:47 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/24 15:58:56 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@ void	mode_invite_only(ircserv& serv, std::string chan, int client_s,
 	std::string	msg;
 	bool		value = (action == '+') ? true : false;
 
+	if (action == '+' && serv._channels[chan]->get_invite_bool())
+		return ;
+	if (action == '-' && !serv._channels[chan]->get_invite_bool())
+		return ;
 	serv._channels[chan]->set_invite_bool(value);
 // 	command_message(serv, client_s, "MODE", chan + " " + action + "i");
 
@@ -71,13 +75,113 @@ void	mode_key(ircserv& serv, std::vector<std::string>& vc, int client_s,
 	std::cout << "Mode Key function\n";
 }
 
-/* look for the exact behavior of mode +/-o, arguments... compare the behavior
-   in inspird server and compare it with other servers
-*/
-void	mode_op_privileges() {
+std::vector<Client*>::iterator
+		member_index(std::vector<Client*>& members, std::string nick) {
+	std::vector<Client*>::iterator	it;
+
+	for (it = members.begin(); it != members.end(); it++) {
+		if ((*it)->get_nickname().compare(nick) == 0)
+			return it;
+	}
+	return members.end();
 }
 
-void	mode_user_limit() {}
+bool	check_op_req(ircserv& serv, std::vector<std::string>& vc, char action) {
+	if (vc.size() != 4)
+		return false;
+
+	if (!client_in_chan(serv, vc[1], vc[3], -1))
+		return false;
+	if (action == '+' &&
+		client_in_chan(serv, vc[1], vc[3], 0))
+		return false;
+	if (action == '-' &&
+		!client_in_chan(serv, vc[1], vc[3], 0))
+		return false;
+	return true;
+}
+
+void	mode_op_privileges(ircserv& serv, std::vector<std::string>& vc, int client_s,
+							char action) {
+	std::vector<Client*>::iterator	member_pos;
+	std::vector<Client*>::iterator	members_begin;
+	Client*							member;
+	std::string						msg;
+
+	if (!check_op_req(serv, vc, action)) {
+		std::cout << "Error in operator function................\n";
+		return ;}
+	
+	if (action == '+') {
+		serv._channels[vc[1]]->_operators_n++;
+		member_pos = member_index(serv._channels[vc[1]]->_members, vc[3]);
+		member = *member_pos;
+		members_begin = serv._channels[vc[1]]->_members.begin();
+		serv._channels[vc[1]]->_members.erase(member_pos);
+		serv._channels[vc[1]]->_members.insert(members_begin + 1, member);
+	}
+	else {
+		serv._channels[vc[1]]->_operators_n--; member_pos = member_index(serv._channels[vc[1]]->_members, vc[3]);
+		member = *member_pos;
+		serv._channels[vc[1]]->_members.erase(member_pos);
+		serv._channels[vc[1]]->_members.push_back(member);
+	}
+
+	msg = "\r\n:" + serv._clients[client_s]->get_nickname() +
+		  "!" + serv._clients[client_s]->get_username() +
+		  "@localhost MODE " + vc[1] + " " + action + "o " +
+		  vc[3] + "\r\n";
+
+	forward_to_chan(serv, vc[1], msg, client_s, true);
+	std::cout << "Mode Operator function\n";
+}
+
+bool	check_limit_req(std::vector<std::string>& vc, char action) {
+	if ((action == '-' && vc.size() != 3) || // uselesss since when -l any additional arg get joined to one string
+		(action == '+' && vc.size() != 4))
+		return false;
+	if (vc.size() == 4 && vc[3][0] == '-')
+		return false;
+	if (vc.size() == 4 && std::strtoul(vc[3].c_str(), 0, 10) > 2147483647)
+		return false;
+	return true;
+}
+
+void	mode_user_limit(ircserv& serv, std::vector<std::string>& vc, int client_s,
+							char action) {
+	bool		b;
+	int			limit;
+	std::string	msg;
+
+	if (!check_limit_req(vc, action)) {
+		std::cout << "Error in User limit req........\n";
+		return ;
+	}
+	if (action == '-' && !serv._channels[vc[1]]->get_user_limit_bool())
+		return ;
+	
+	b = (action == '+') ? true : false;
+	if (action == '+') {
+		limit = std::atoi(vc[3].c_str());
+		if (limit <= 0)
+			return ;
+		serv._channels[vc[1]]->set_user_limit(limit);
+	}
+	else
+		serv._channels[vc[1]]->set_user_limit(-1);
+	serv._channels[vc[1]]->set_user_limit_bool(b);
+
+	msg = "\r\n:" + serv._clients[client_s]->get_nickname() +
+		  "!" + serv._clients[client_s]->get_username() +
+		  "@localhost MODE " + vc[1] + " " + action + "l";
+
+	if (action == '+')
+		msg += " " + to_string(limit);
+	msg += "\r\n";
+
+	forward_to_chan(serv, vc[1], msg, client_s, true);
+	std::cout << "Mode User Limit function\n";
+}
 
 bool	check_mode_req(ircserv& serv, std::string chan, int client_s) {
 	if (serv._channels.find(chan) == serv._channels.end())
@@ -109,7 +213,7 @@ void Command::mode(std::vector<std::string> &vc, int client_socket) {
 
 // ---------------------------------------------------------------
 
-	if (vc[2].size() != 2 || (vc[2][0] != '+' && vc[2][0] != '-')) {
+	if ((vc[2][0] != '+' && vc[2][0] != '-')) {
 		std::cout << "mode chars are Missing!!!!\n"; 
 		return ;
 	}
@@ -131,9 +235,9 @@ void Command::mode(std::vector<std::string> &vc, int client_socket) {
 			mode_key(*_ircserv, vc, client_socket, action);
 			break ;
 		case ('o'):
-			mode_op_privileges();
+			mode_op_privileges(*_ircserv, vc, client_socket, action);
 			break ;
 		case ('l'):
-			mode_user_limit();
+			mode_user_limit(*_ircserv, vc, client_socket, action);
 	}
 }

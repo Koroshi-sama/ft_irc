@@ -14,7 +14,7 @@ bool	client_in_chan(ircserv& serv, std::string& chan, std::string client_nick, i
 	if (range == 0)
 		op_n = serv._channels[chan]->_operators_n;
 	for (unsigned int i = 0; i < op_n; i++) {
-		if (serv._channels[chan]->_members[i].get_nickname().compare(client_nick) == 0)
+		if (serv._channels[chan]->_members[i]->get_nickname().compare(client_nick) == 0)
 			return true;
 	}
 	return false;
@@ -51,10 +51,10 @@ bool	check_kick_req(std::vector<std::string>& vc, int client_s, ircserv& serv) {
 }
 
 void	remove_user(ircserv& serv, std::string chan, std::string user) {
-	std::vector<Client>::iterator	it = serv._channels[chan]->_members.begin();
+	std::vector<Client*>::iterator	it = serv._channels[chan]->_members.begin();
 
 	for (; it != serv._channels[chan]->_members.end(); it++) {
-		if (it->get_nickname().compare(user) == 0) {
+		if ((*it)->get_nickname().compare(user) == 0) {
 			serv._channels[chan]->_members.erase(it);
 			return ;
 		}

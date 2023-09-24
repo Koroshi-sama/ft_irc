@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:29:30 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/24 13:00:34 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/24 18:22:11 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,17 @@ int    ircserv::remove_client(int i, int countClients) {
     int client_socket = fds[i].fd;
 
     if (_clients[client_socket]->get_status() == HAS_QUITED) {
+        // delete the client from the vector of channels
+        std::map<std::string, Channel*>::iterator it = _channels.begin();
+        for (; it != _channels.end(); it++) {
+            std::vector<Client*>::iterator it2 = it->second->_members.begin();
+            for (; it2 != it->second->_members.end(); it2++) {
+                if (_clients[client_socket]->get_nickname() == (*it2)->get_nickname()) {
+                    it->second->_members.erase(it2);
+                    break ;
+                }
+            }
+        }
         if (_clients[client_socket]) {
             delete _clients[client_socket];
             _clients.erase(client_socket);

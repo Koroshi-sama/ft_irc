@@ -18,10 +18,10 @@ private:
 
 
 public:
-	std::string			_channel_name;
-	std::vector<Client>	_members;
-	int					_operators_n;
-	std::string			_default_kick_msg;
+	std::string				_channel_name;
+	std::vector<Client*>	_members;
+	int						_operators_n;
+	std::string				_default_kick_msg;
 
 	Channel(std::string);
 	~Channel();
@@ -45,6 +45,7 @@ public:
 	void			set_key_bool(bool);
 	void			set_invite_bool(bool);
 	void			set_user_limit_bool(bool);
+	void			set_user_limit(int);
 	void			set_topic_op_bool(bool);
 
 
