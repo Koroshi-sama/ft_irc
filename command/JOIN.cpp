@@ -8,26 +8,23 @@ std::string	reply(std::string client_nickname,
 			parameter + "\r\n";
 }
 
-bool	check_key_error(ircserv* serv, std::vector<std::string> &vc,
-						int client_socket) {
+bool	check_chan_key(ircserv& serv, std::vector<std::string> &vc,
+						int client_s) {
 
-	(void)client_socket;
-	if (!serv->_channels[vc[1]]->get_key_bool())
+	if (!serv._channels[vc[1]]->get_key_bool())
 		return true;
-/*// 	else if (vc.size() == 2)
-// 		send(client_socket, ERR_PASSWDMISMATCH (464), sizeof(), 0);
-// 	else if (vc.size() == 3 && \
-			serv->_channels[vc[1]]->get_key().compare(vc[2]) != 0)
-// 		send(client_socket, ERR_PASSWDMISMATCH (464),\
-				sizeof(ERR_NEEDMOREPARAMS), 0);
-// 	if (vc.size() == 3 &&\
-		serv->_channels[vc[1]]->get_key().strcmp(vc[2]) == 0) {
-// 		// SUCCESS
-// 		// add member and send message to every member in the channel
-// 		return true;
-// 	}
-*/
-	return true;   // just for now
+ 	else if (vc.size() == 2) {
+		numerical_message(serv, client_s, 475,
+							vc[1] + " :Cannot join channel (+k)");
+		return false;
+	}
+	else if (vc.size() == 3 && 
+			serv._channels[vc[1]]->get_key().compare(vc[2]) != 0) {
+		numerical_message(serv, client_s, 475,
+							vc[1] + " :Cannot join channel (+k)");
+		return false;
+	}
+	return true;
 }
 
 void	create_chan_add_cl(ircserv *serv, std::string chan, int client_s) {
@@ -62,14 +59,13 @@ void	send_members_list(ircserv* serv, std::string chan, int client_s) {
 	numerical_message(*serv, client_s, 366, param);
 }
 
-bool	check_join_req(ircserv& serv, std::vector<std::string> &vc, int client_s) {
+bool	check_chan_invite(ircserv& serv, std::vector<std::string> &vc, int client_s) {
 	std::vector<std::string>			channels;
 	std::vector<std::string>::iterator	it;
 
-// 	if (serv._channels[vc[1]]->is_channel_full())
-		// send error
 	if (!serv._channels[vc[1]]->get_invite_bool())
 		return true;
+	channels = serv._clients[client_s]->invited_channels;
 
 	channels = serv._clients[client_s]->invited_channels;
 	std::cout << "Channels client is invited to: ";
@@ -78,12 +74,32 @@ bool	check_join_req(ircserv& serv, std::vector<std::string> &vc, int client_s) {
 	std::cout << std::endl;
 
 	it = std::find(channels.begin(), channels.end(), vc[1]);
-	if (serv._channels[vc[1]]->get_invite_bool() &&
-		it == channels.end()) {
+	if (it == channels.end()) {
 			numerical_message(serv, client_s, 473,
 								vc[1] + " :Cannot join channel (+i)");
 			return false;
 	}
+	return true;
+}
+
+bool	check_chan_userlimit(ircserv& serv, std::vector<std::string> &vc,
+								int client_s) {
+	if ((int)serv._channels[vc[1]]->_members.size() ==
+	serv._channels[vc[1]]->get_user_limit()) {
+		numerical_message(serv, client_s, 471,
+							vc[1] + " :Cannot join channel (+l)");
+		return false;
+	}
+	return true;
+}
+
+bool	check_join_req(ircserv& serv, std::vector<std::string> &vc, int client_s) {
+	if (!check_chan_userlimit(serv, vc, client_s))
+		return (std::cout << "JOIN: error in user limit\n", false);
+	if (!check_chan_invite(serv, vc, client_s))
+		return (std::cout << "JOIN: error in invite\n", false);
+	if (!check_chan_key(serv, vc, client_s))
+		return (std::cout << "JOIN: error in key (password)\n", false);
 	return true;
 }
 
@@ -116,21 +132,19 @@ void	Command::join(std::vector<std::string> &vc, int client_socket) {
 				// channel exists
 				if (!check_join_req(*this->_ircserv, vc, client_socket))
 					return ;
-				if (check_key_error(this->_ircserv, vc, client_socket)) {
-					client = this->_ircserv->_clients[client_socket];
-					this->_ircserv->_channels[vc[1]]->_members.push_back(client);
-					this->_ircserv->_clients[client_socket]->set_channel(vc[1]);
-					// SUCCESS
-					msg = "\r\n:" + client->get_nickname() + " JOIN " 
-							+ ":" + vc[1] + "\r\n";
-					forward_to_chan(*_ircserv, vc[1], msg, client_socket, true);
-					chan_topic = _ircserv->_channels[vc[1]]->get_topic();
-					if (!chan_topic.empty())
-						numerical_message(*_ircserv, client_socket, 332, 
-											vc[1] + " :" + chan_topic);
-					// maybe should also send the time of topic creation?
-					send_members_list(this->_ircserv, vc[1],  client_socket);
-				}
+				client = this->_ircserv->_clients[client_socket];
+				this->_ircserv->_channels[vc[1]]->_members.push_back(client);
+				this->_ircserv->_clients[client_socket]->set_channel(vc[1]);
+				// SUCCESS
+				msg = "\r\n:" + client->get_nickname() + " JOIN " 
+						+ ":" + vc[1] + "\r\n";
+				forward_to_chan(*_ircserv, vc[1], msg, client_socket, true);
+				chan_topic = _ircserv->_channels[vc[1]]->get_topic();
+				if (!chan_topic.empty())
+					numerical_message(*_ircserv, client_socket, 332, 
+										vc[1] + " :" + chan_topic);
+				// maybe should also send the time of topic creation?
+				send_members_list(this->_ircserv, vc[1],  client_socket);
 			}
 		}
 	}
