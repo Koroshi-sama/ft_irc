@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 18:30:13 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/24 10:42:13 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/24 13:03:00 by atouba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,52 @@ void	mode_op_privileges(ircserv& serv, std::vector<std::string>& vc, int client_
 	std::cout << "Mode Operator function\n";
 }
 
-void	mode_user_limit() {}
+bool	check_limit_req(std::vector<std::string>& vc, char action) {
+	if ((action == '-' && vc.size() != 3) || // uselesss since when -l any additional arg get joined to one string
+		(action == '+' && vc.size() != 4))
+		return false;
+	if (vc.size() == 4 && vc[3][0] == '-')
+		return false;
+	if (vc.size() == 4 && std::strtoul(vc[3].c_str(), 0, 10) > 2147483647)
+		return false;
+	return true;
+}
+
+void	mode_user_limit(ircserv& serv, std::vector<std::string>& vc, int client_s,
+							char action) {
+	bool		b;
+	int			limit;
+	std::string	msg;
+
+	if (!check_limit_req(vc, action)) {
+		std::cout << "Error in User limit req........\n";
+		return ;
+	}
+	if (action == '-' && !serv._channels[vc[1]]->get_user_limit_bool())
+		return ;
+	
+	b = (action == '+') ? true : false;
+	if (action == '+') {
+		limit = std::atoi(vc[3].c_str());
+		if (limit <= 0)
+			return ;
+		serv._channels[vc[1]]->set_user_limit(limit);
+	}
+	else
+		serv._channels[vc[1]]->set_user_limit(-1);
+	serv._channels[vc[1]]->set_user_limit_bool(b);
+
+	msg = "\r\n:" + serv._clients[client_s]->get_nickname() +
+		  "!" + serv._clients[client_s]->get_username() +
+		  "@localhost MODE " + vc[1] + " " + action + "l";
+
+	if (action == '+')
+		msg += " " + to_string(limit);
+	msg += "\r\n";
+
+	forward_to_chan(serv, vc[1], msg, client_s, true);
+	std::cout << "Mode User Limit function\n";
+}
 
 bool	check_mode_req(ircserv& serv, std::string chan, int client_s) {
 	if (serv._channels.find(chan) == serv._channels.end())
@@ -165,7 +210,7 @@ void Command::mode(std::vector<std::string> &vc, int client_socket) {
 
 // ---------------------------------------------------------------
 
-	if (vc[2].size() != 2 || (vc[2][0] != '+' && vc[2][0] != '-')) {
+	if ((vc[2][0] != '+' && vc[2][0] != '-')) {
 		std::cout << "mode chars are Missing!!!!\n"; 
 		return ;
 	}
@@ -190,6 +235,6 @@ void Command::mode(std::vector<std::string> &vc, int client_socket) {
 			mode_op_privileges(*_ircserv, vc, client_socket, action);
 			break ;
 		case ('l'):
-			mode_user_limit();
+			mode_user_limit(*_ircserv, vc, client_socket, action);
 	}
 }
