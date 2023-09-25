@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 18:30:13 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/25 12:55:34 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/25 15:53:50 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,11 @@ void	mode_invite_only(ircserv& serv, std::string chan, int client_s,
 	if (action == '-' && !serv._channels[chan]->get_invite_bool())
 		return ;
 	serv._channels[chan]->set_invite_bool(value);
-// 	command_message(serv, client_s, "MODE", chan + " " + action + "i");
 
 	msg = "\r\n:" + serv._clients[client_s]->get_nickname() +
 		  "!" + serv._clients[client_s]->get_username() +
 		  "@" + serv._clients[client_s]->get_hostname() + " MODE " + chan + " " + action + "i\r\n";
 	forward_to_chan(serv, chan, msg, client_s, true);
-	std::cout << "Mode Invite Only function\n";
 }
 
 void	mode_topic(ircserv& serv, std::string chan, int client_s,
@@ -37,15 +35,12 @@ void	mode_topic(ircserv& serv, std::string chan, int client_s,
 	bool		value = (action == '+') ? true : false;
 
 	serv._channels[chan]->set_topic_op_bool(value);
-	std::cout << "------->>>> " << serv._clients[client_s]->get_hostname() << std::endl;
 	msg = "\r\n:" + serv._clients[client_s]->get_nickname() +
 		  "!" + serv._clients[client_s]->get_username() +
 		  "@" + serv._clients[client_s]->get_hostname() + " MODE " + chan + " " + action + "t\r\n";
 	forward_to_chan(serv, chan, msg, client_s, true);
-	std::cout << "Mode Topic function\n";
 }
 
-// void	mode_key(ircserv& serv, std::vector<std::string> vc, int client_s,
 void	mode_key(ircserv& serv, std::vector<std::string>& vc, int client_s,
 							char action) {
 	std::string	msg;
@@ -72,7 +67,6 @@ void	mode_key(ircserv& serv, std::vector<std::string>& vc, int client_s,
 	  vc[3] + "\r\n";
 
 	forward_to_chan(serv, vc[1], msg, client_s, true);
-	std::cout << "Mode Key function\n";
 }
 
 std::vector<Client*>::iterator
@@ -109,7 +103,6 @@ void	mode_op_privileges(ircserv& serv, std::vector<std::string>& vc, int client_
 	std::string						msg;
 
 	if (!check_op_req(serv, vc, action)) {
-		std::cout << "Error in operator function................\n";
 		return ;}
 	
 	if (action == '+') {
@@ -133,7 +126,6 @@ void	mode_op_privileges(ircserv& serv, std::vector<std::string>& vc, int client_
 		  vc[3] + "\r\n";
 
 	forward_to_chan(serv, vc[1], msg, client_s, true);
-	std::cout << "Mode Operator function\n";
 }
 
 bool	check_limit_req(std::vector<std::string>& vc, char action) {
@@ -154,7 +146,6 @@ void	mode_user_limit(ircserv& serv, std::vector<std::string>& vc, int client_s,
 	std::string	msg;
 
 	if (!check_limit_req(vc, action)) {
-		std::cout << "Error in User limit req........\n";
 		return ;
 	}
 	if (action == '-' && !serv._channels[vc[1]]->get_user_limit_bool())
@@ -180,7 +171,6 @@ void	mode_user_limit(ircserv& serv, std::vector<std::string>& vc, int client_s,
 	msg += "\r\n";
 
 	forward_to_chan(serv, vc[1], msg, client_s, true);
-	std::cout << "Mode User Limit function\n";
 }
 
 bool	check_mode_req(ircserv& serv, std::string chan, int client_s) {
@@ -203,15 +193,12 @@ bool	check_mode_req(ircserv& serv, std::string chan, int client_s) {
 
 void Command::mode(std::vector<std::string> &vc, int client_socket) {
 	if (_ircserv->_channels.empty()) {
-		std::cout << "No channels\n";
 		return ;
 	}
 	if (vc.size() < 2) {
-		std::cout << "Not enough arguments\n";
 		return ;
 	}
 // ----------------------------------------------------------------
-	std::cout << "Mooooooode" << vc[1] << client_socket << std::endl;
 
 	if (vc.size() == 2) {
 		std::string replay = "221 RPL_UMODEIS\r\n";
@@ -221,15 +208,13 @@ void Command::mode(std::vector<std::string> &vc, int client_socket) {
 	if (vc.size() == 3 && vc[1] == "RPL_WELCOME") {return;}
 // ---------------------------------------------------------------
 	
-	if ((vc[2][0] != '+' && vc[2][0] != '-')) {
-		std::cout << "mode chars are Missing!!!!\n"; 
+	if ((vc[2][0] != '+' && vc[2][0] != '-')) { 
 		return ;
 	}
     char	mode = vc[2][1];        // could be i | l...
 	char	action = vc[2][0];      // could be - | + 
 
 	if (!check_mode_req(*_ircserv, vc[1], client_socket)) {
-		std::cout << "Error in mode request!!!!\n";
 		return ;
 	}
 	switch (mode) {

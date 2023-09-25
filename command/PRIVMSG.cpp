@@ -21,14 +21,13 @@ void	target_client(int client_s, std::map<int, Client*>& clients, std::string ta
 		reply = "\r\n:" + clients[client_s]->get_nickname() + " PRIVMSG " + \
 				target + " " + msg + "\r\n";
 		if (send(target_s, reply.c_str(), reply.size() + 1, 0) > 0) {
-			std::cout << "THE MESSAGE IS SENT\n";
-			std::cout << reply;
+			std::cout << "";
 		}
 		else
-			std::cout << "THE MESSAGE DIDN'T GET SENT\n";
+			std::cout << "";
 	}
 	else
-		std::cout << "TARGET NOT FOUND.................. send error later\n";
+		std::cout << "";
 }
 
 // give a msg, it will simply forward it to all the members of the channel, except the sender
@@ -41,7 +40,7 @@ void	forward_to_chan(ircserv& serv, std::string chan, std::string msg, int clien
 			continue ;
 		target_s = target_socket((*it)->get_nickname(), serv._clients);
 		if (send(target_s, msg.c_str(), msg.size() + 1, 0) < 0)
-			std::cout << "THE MESSAGE IS NOT SENT TO A MEMBER IN THE CHANNEL\n";
+			std::cout << "";
 	}
 }
 
@@ -52,16 +51,13 @@ void	target_channel(int client_s, std::map<int, Client*> clients, std::string ta
 	std::string	msg;
 
 	if (serv._channels.find(target) == serv._channels.end()) {
-		std::cout << "CHANNel not found\n";
 		send(client_s, "403 ERR_NOSUCHCHANNEL\r\n...", 27, 0);
 	}
 	else {
 		msg = buffer.erase(0, buffer.find(':'));
 		if (msg == ":!rules\r\n" || msg == ":!rules\n") {
-			std::cout << "bot : rules function  is launched " << std::endl;
 			bot.rules(clients, target, client_s);
 		} else if (msg == ":!help\r\n" || msg == ":!help\n") {
-			std::cout << "bot : rules function  is launched " << std::endl;
 			bot.help(clients, target, client_s);
 		} else {
 			msg = buffer.erase(0, buffer.find(':'));
@@ -77,9 +73,7 @@ void Command::privmsg(std::vector<std::string> &vc, int client_socket) {
 	std::string	reply;
 
 	if (vc.size() < 3)
-		std::cout << "LESS THAN 3 ARGS.................. send error (if any) later\n";
-	else if (this->_ircserv->_clients.find(client_socket) == this->_ircserv->_clients.end())  // remove this condition later
-		std::cout << "WTF, CLIENT SOCKET NOT FOUND\n";
+		std::cout << "";
 	else {
 		if (vc[1][0] == '#')
 			target_channel(client_socket, this->_ircserv->_clients, vc[1], _buffer, *this->_ircserv, _bot);

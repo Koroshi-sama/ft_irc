@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:32 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/25 14:14:11 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/25 15:42:04 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int main(int ac, char **av) {
             if (irc.fds[0].revents && POLLIN) {
                 // Accept new connection. Check client.cpp for accept_client() function.
                 int client_socket = irc.accept_client();
-                std::cout << "client_socket: " << client_socket << std::endl;
                 if (client_socket != -1) {
                     irc.countClients++;
                     irc.fds[irc.countClients].fd = client_socket;
@@ -55,9 +54,7 @@ int main(int ac, char **av) {
                 
             }
             for (int i = 1; i <= irc.countClients; i++) {
-                std::cout << "---------" << irc.countClients << std::endl;
                 if (irc.fds[i].revents && POLLIN) {
-                    std::cout << "----> Entered if irc.fds <----" << std::endl;
                     // Receive message from client: buffer that will contain the message, bytesReceived: number of bytes received, all this handled by recv() function.
                     char buffer[MAX_BUFFER];
                     memset(buffer, 0, sizeof(buffer));
@@ -68,17 +65,11 @@ int main(int ac, char **av) {
                         break;
                     }
                     else if (bytesReceived == 0) {
-                        std::cout << "Client " << irc.fds[i].fd << " disconnectedddddddd" << std::endl;
                         irc._clients[irc.fds[i].fd]->set_status(HAS_QUITED);
                         irc.countClients = irc.remove_client(i, irc.countClients);
                         break;
                     }
                     else {
-                        /**DEBUG MSG**/
-                        std::cout << "--------------------------------------------------------------" << std::endl;
-                        std::cout << "Received from client " << irc.fds[i].fd << ": " << buffer << std::endl;
-                        std::cout << "--------------------------------------------------------------" << std::endl;
-                        /**DEBUG MSG**/
                         command.handle_commands(buffer, irc.fds[i].fd);
                         irc.countClients = irc.remove_client(i, irc.countClients);
                     }

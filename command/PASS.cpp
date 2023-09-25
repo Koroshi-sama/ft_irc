@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 16:17:34 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/25 08:35:45 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/25 15:50:54 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void Command::pass(std::vector<std::string> &vc, int client_socket) {
     std::string password = _ircserv->get_password();
-    std::cout << "Paaaaaass" << client_socket << std::endl;
     std::string second_vc = "";
     if (vc.size() > 1) {
         second_vc = vc[1];

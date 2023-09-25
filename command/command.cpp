@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:18 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/25 15:11:22 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/25 16:01:12 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ Command::Command(ircserv *ircserv): _ircserv(ircserv), _bot(bot("Xbot")) {
     _commands["JOIN"] = &Command::join;
     _commands["PRIVMSG"] = &Command::privmsg;
     _commands["PING"] = &Command::ping;
-    _commands["MODE"] = &Command::mode;
     _commands["KICK"] = &Command::kick;
     _commands["INVITE"] = &Command::invite;
     _commands["MODE"] = &Command::mode;
@@ -46,7 +45,6 @@ void Command::parse_command(std::string command, int client_socket) {
                 *it = strtrim(*it);
             }
             _params[tokens[0]] = tokens;
-            std::cout << "Command in the parsing funtcion: " << tokens[0] << std::endl;
             if (_commands.find(tokens[0]) != _commands.end()) {
                 if (tokens[0] == "PASS" || _ircserv->_clients[client_socket]->get_check_pass() == PASSWORD) {
                     if (tokens[0] == "PASS" || tokens[0] == "NICK" || tokens[0] == "USER" 
@@ -54,7 +52,6 @@ void Command::parse_command(std::string command, int client_socket) {
                         && _ircserv->_clients[client_socket]->get_check_user() == USERCHECKED)) {
                         (this->*_commands[tokens[0]])(tokens, client_socket);
                     }
-                    // (this->*_commands[tokens[0]])(tokens, client_socket);
                 }
             }
         }
@@ -63,8 +60,6 @@ void Command::parse_command(std::string command, int client_socket) {
 }
 
 void Command::quit(std::vector<std::string> &vc, int client_socket) {
-    std::cout << "Quuuuuuit" << client_socket << std::endl;
-    // It should delete the client that has quit the client and send a message to all the clients in the same channel
     Client *client = _ircserv->_clients[client_socket];
     std::string second_vs = "";
     if (vc.size() > 1) {
@@ -76,9 +71,6 @@ void Command::quit(std::vector<std::string> &vc, int client_socket) {
 }
 
 void Command::ping(std::vector<std::string> &vc, int client_socket) {
-    std::cout << "Piiiiiiiiing" << vc[1] << client_socket << std::endl;
-    // Client *client = _ircserv->_clients[client_socket];
     std::string reply = "\r\nPONG :" + vc[1] + "\r\n";
     send(client_socket, reply.c_str(), reply.size(), 0);
 }
-

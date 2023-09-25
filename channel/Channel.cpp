@@ -31,7 +31,6 @@ void	Channel::set_invite_bool(bool v) {
 }
 
 bool	Channel::get_user_limit_bool() const {
-// 	return (_user_limit < 0) ? false : true;
  	return _user_limit_bool;
 }
 

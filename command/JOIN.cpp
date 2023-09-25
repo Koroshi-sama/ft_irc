@@ -28,7 +28,6 @@ bool	check_chan_key(ircserv& serv, std::vector<std::string> &vc,
 }
 
 void	create_chan_add_cl(ircserv *serv, std::string chan, int client_s) {
-// 	int	target_s;
 	std::string	reply;
 
 	serv->_channels.insert(std::pair<std::string, Channel*>(chan, new Channel(chan)));
@@ -47,7 +46,6 @@ void	send_members_list(ircserv* serv, std::string chan, int client_s) {
 	unsigned int	op_n;
 
 	op_n = serv->_channels[chan]->_operators_n;
-	// "=" char denotes that the channel is public, when it's not?
 	param = "= " + chan + " :";
 	for (unsigned int i = 0; i < op_n; i++)
 		param += "@" + serv->_channels[chan]->_members[i]->get_nickname();
@@ -66,12 +64,6 @@ bool	check_chan_invite(ircserv& serv, std::vector<std::string> &vc, int client_s
 	if (!serv._channels[vc[1]]->get_invite_bool())
 		return true;
 	channels = serv._clients[client_s]->invited_channels;
-
-	channels = serv._clients[client_s]->invited_channels;
-	std::cout << "Channels client is invited to: ";
-	for (size_t i = 0; i < channels.size(); i++)
-		std::cout << channels[i] << "  ";
-	std::cout << std::endl;
 
 	it = std::find(channels.begin(), channels.end(), vc[1]);
 	if (it == channels.end()) {
@@ -95,27 +87,25 @@ bool	check_chan_userlimit(ircserv& serv, std::vector<std::string> &vc,
 
 bool	check_join_req(ircserv& serv, std::vector<std::string> &vc, int client_s) {
 	if (!check_chan_userlimit(serv, vc, client_s))
-		return (std::cout << "JOIN: error in user limit\n", false);
+		return (false);
 	if (!check_chan_invite(serv, vc, client_s))
-		return (std::cout << "JOIN: error in invite\n", false);
+		return (false);
 	if (!check_chan_key(serv, vc, client_s))
-		return (std::cout << "JOIN: error in key (password)\n", false);
+		return (false);
 	return true;
 }
 
 void	Command::join(std::vector<std::string> &vc, int client_socket) {
-// 	int			target_s;
 	std::string	msg;
 	Client*		client;
 	std::string	chan_topic;
 
 	if (vc.size() == 1 || vc.size() > 3)
-		std::cout << "Not enough parameters or too many paramaters\n";
+		std::cout << "";
 	if (vc.size() == 2 || vc.size() == 3) {
 		if (vc[1].find(',') != std::string::npos ||
 				(vc.size() == 3 && vc[2].find(',') != std::string::npos)) {
-			std::cout << "We will ignore this req. You can't join multiple \
-					   channels at the same time or issue multiple passwords\n";
+			std::cout << "";
 		}
 		else {
 			if (this->_ircserv->_channels.find(vc[1]) ==
@@ -143,7 +133,6 @@ void	Command::join(std::vector<std::string> &vc, int client_socket) {
 				if (!chan_topic.empty())
 					numerical_message(*_ircserv, client_socket, 332, 
 										vc[1] + " :" + chan_topic);
-				// maybe should also send the time of topic creation?
 				send_members_list(this->_ircserv, vc[1],  client_socket);
 			}
 		}

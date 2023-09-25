@@ -2,7 +2,7 @@
 
 bot::bot(std::string name) {
     _name = name;
-    _help = "# Sure, I can help you! Here are some available commands : - !rules: Displays the channel rules. Feel free to ask any questions or use these commands. Enjoy your time in #ChannelName! 😊";
+    _help = "# Sure, I can help you! Here are some available commands : - !rules: Displays the channel rules. Feel free to ask any questions or use these commands. Enjoy your time! 😊";
     _rules = "# Before you start chatting, please take a moment to review our channel rules: - Rule 1: Be respectful to fellow members. - Rule 2: No spamming or advertising.- Rule 3: Stay on-topic.";
     
 };

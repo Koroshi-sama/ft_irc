@@ -31,16 +31,9 @@ bool	check_chan_cli(ircserv& serv, std::string chan, int client_s) {
 		);
 	if (serv._channels.find(chan) == serv._channels.end())
 		return (
-			numerical_message(serv, client_s, 403, chan + " :No such channelQ"),
+			numerical_message(serv, client_s, 403, chan + " :No such channel"),
 			false
 		);
-// 	if ()
-// 		serv._channels[chan]->get_topic_op_only() &&
-// 		!client_in_chan(serv, chan, socket_nick(serv, client_s), 0)
-// 		return (
-// 			numerical_message(serv, client_s, 403, chan + " :No such channelQ"),
-// 			false
-// 		);
 	return true;
 }
 
@@ -61,17 +54,13 @@ void	send_topic(ircserv& serv, std::string chan, int client_s) {
 void	Command::topic(std::vector<std::string>& vc, int client_socket) {
 	std::string	msg;
 
-	// I presume that vc.size() > 1
 	if (_ircserv->_channels.empty()) {
-		std::cout << "No channels\n";
 		return ;
 	}
 	if (vc.size() < 2) {
-		std::cout << "Not enough arguments\n";
 		return ;
 	}
 	if (!check_chan_cli(*_ircserv, vc[1], client_socket)) {
-		std::cout << "Error in chan/cli (TOPIC)\n";
 		return ;
 	}
 	if (vc.size() == 2)
@@ -100,7 +89,6 @@ void	Command::topic(std::vector<std::string>& vc, int client_socket) {
 			_ircserv->_clients[client_socket]->get_username() + "@" + _ircserv->_clients[client_socket]->get_hostname() + " TOPIC " +
 			vc[1] + " :" +
 			_ircserv->_channels[vc[1]]->get_topic() + "\r\n";
-	std::cout << "TOPIC command: " << msg << std::endl;
 	forward_to_chan(*_ircserv, vc[1], msg, client_socket, true);
 }
 

@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:29:30 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/25 10:11:34 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/25 16:02:29 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,6 @@ int    ircserv::accept_client() {
     if (_clients[clientSocket] == NULL) {
         add_client(clientSocket);
     }
-
-    /**DEBUG MSG**/
-    std::cout << "Client " << clientSocket << " connected" << std::endl;
-    /**DEBUG MSG**/
-
     return (clientSocket);
 }
 
@@ -42,11 +37,6 @@ void    ircserv::add_client(int clientSocket) {
     _clients[clientSocket] = new Client();
     _clients[clientSocket]->set_hostname(ip);
     _clients[clientSocket]->set_status(OFFLINE);
-
-    /**DEBUG MSG**/
-    std::cout << "Client " << clientSocket << " added" << std::endl;
-    std::cout << _clients[clientSocket]->get_hostname() << std::endl;
-    /**DEBUG MSG**/
 }
 
 int    ircserv::remove_client(int i, int countClients) {
@@ -60,10 +50,8 @@ int    ircserv::remove_client(int i, int countClients) {
             std::vector<Client*>::iterator it2 = it->second->_members.begin();
             for (; it2 != it->second->_members.end(); it2++) {
                 if (_clients[client_socket]->get_nickname() == (*it2)->get_nickname()) {
-                    // Set the quitting message and forward it to the channel. The message should be liek this :Bruyne!b@localhost PART #toto
                     std::string msg = "\r\n:" + _clients[client_socket]->get_nickname() + "!" + _clients[client_socket]->get_username() + "@" + _clients[client_socket]->get_hostname() + " QUIT " + it->first + "\r\n";
                     forward_to_chan(*this, it->first, msg, client_socket, false);
-					// Decrement the operators number if the client being removed is an operator
 					channel = it->first;
 					if (client_in_chan(*this, channel, (*it2)->get_nickname(), 0))
 						it->second->_operators_n--;

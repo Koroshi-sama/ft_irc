@@ -20,16 +20,14 @@ bool	client_in_chan(ircserv& serv, std::string& chan, std::string client_nick, i
 	return false;
 }
 
-// chan argument (channel) can be given as a command also, when errors have <command> in place of <channel>
 void	send_error(int error, std::string client_nick, int client_s, std::string chan, std::string msg) {
-	// localhost should be replaced by hostname
 	std::string	error_msg =  "\r\n:localhost " + to_string(error) + " " + client_nick + " " + \
 						chan + " :" + msg + "\r\n";
 	
 	if (send(client_s, error_msg.c_str(), error_msg.size() + 1, 0) < 0)
-		std::cout << "ERROR NOT SEND TO USER WHO'S NOT OP\n";
+		std::cout << "";
 	else
-		std::cout << "ERROR SENT\n" << error_msg << std::endl;
+		std::cout << "";
 }
 
 // check channel exists
@@ -39,10 +37,9 @@ bool	check_kick_req(std::vector<std::string>& vc, int client_s, ircserv& serv) {
 	std::string	client_nick = socket_nick(serv, client_s);
 
 	if (vc.size() < 3)
-		return (send_error(461, client_nick, client_s, vc[1], "Not enough parameters"), false);    // maybe this error is sent by default by irssi
+		return (send_error(461, client_nick, client_s, vc[1], "Not enough parameters"), false);
 	if (serv._channels.find(vc[1]) == serv._channels.end())
 		return (send_error(401, client_nick, client_s, vc[1], "No such nick/channel"), false);
-	// maybe should also check if client is not in channel
 	if (!client_in_chan(serv, vc[1], client_nick, 0))
 		return (send_error(482, client_nick, client_s, vc[1], " You're not a channel operator"), false);
 	if (!client_in_chan(serv, vc[1], vc[2], -1))
@@ -61,21 +58,17 @@ void	remove_user(ircserv& serv, std::string chan, std::string user) {
 	}
 }
 
-// ! should send the corresponding errors
 void	Command::kick(std::vector<std::string> &vc, int client_socket) {
 	std::string	reply;
 
 	if (_ircserv->_channels.empty()) {
-		std::cout << "No channels\n";
 		return ;
 	}
 	if (vc.size() < 2) {
-		std::cout << "Not enough arguments\n";
 		return ;
 	}
 
 	if (!check_kick_req(vc, client_socket, *_ircserv)) {
-		std::cout << "error in kick request\n";
 		return ;
 	}
 	reply = "\r\n:" + socket_nick(*_ircserv, client_socket) + " KICK " + vc[1] \

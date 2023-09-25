@@ -6,14 +6,13 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 15:06:39 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/25 12:26:19 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/25 16:01:39 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIENT_HPP
 #define CLIENT_HPP
 
-// #include "../server/ircserv.hpp"
 #include "../includes.hpp"
 
 #define ONLINE 2
@@ -22,8 +21,6 @@
 #define HAS_QUITED 555
 #define USERCHECKED 37
 #define NICKCHECKED 38
-
-// Client class: Each client has a nickname, username and a list of channels he is in.
 
 class Client {
     private:
@@ -66,7 +63,5 @@ class Client {
         void set_channel(std::string channel);
 
 };
-
-
 
 #endif
