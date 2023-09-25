@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:38 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/24 20:20:36 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/25 08:32:46 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ class ircserv
         ircserv &operator=(const ircserv &ircserv);
         ~ircserv();
 
+        void    set_password(std::string pass);
         bool    start_server();
         int     accept_client();
         void    stop_server();
@@ -41,6 +42,7 @@ class ircserv
         int    remove_client(int i, int countClients);
         int     get_socket() const ;
         int     get_port() const ;
+        std::string get_password();
         std::string get_creation_time() const;
 
         struct pollfd fds[MAX_NUMB_CLIENTS];

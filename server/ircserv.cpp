@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:34 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/19 09:19:08 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/25 08:42:41 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,8 @@ std::string ircserv::get_creation_time() const {
 
 bool    ircserv::start_server() {
     // Create socket with the socket() system call. AF_INET (IPV4) is the address domain of the socket, SOCK_STREAM is the type of socket, 0 is the protocol.
-    std::string password = "5555";
-    if (_password != password) {
-        std::cerr << "Error: wrong password" << std::endl;
+    if (valid_password(_password) == false) {
+        std::cerr << "Error: Not valid password!" << std::endl;
         return (false);
     }
     _socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -90,9 +89,16 @@ bool    ircserv::start_server() {
     // store the time when the server started and be in this form  11:58:05 Sep 16 2023 
     time_t now = time(0);
     creation_time = ctime(&now);
-    std::cout << creation_time << std::endl;
-    std::cout << "Server started on port " << _port << std::endl;
+    std::cout << "Server started on port " << _port << " at " << creation_time << std::endl;
     return (true);
+}
+
+void    ircserv::set_password(std::string pass) {
+    _password = pass;
+}
+
+std::string ircserv::get_password() {
+    return (_password);
 }
 
 void    ircserv::stop_server() {

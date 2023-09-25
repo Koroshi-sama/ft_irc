@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:29:37 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/18 16:05:32 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/25 08:34:19 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,23 +48,12 @@ std::string strtrim(std::string& str) {
     return trimmed;
 }
 
-std::string set_color(std::string client) {
-    std::string clientt = strtrim(client);
-    std::string colored_client;
-    srand(time(NULL));
-    int color = rand() % 6;
-
-    if (color == 0)
-        colored_client = RED + clientt + RESET;
-    else if (color == 1)
-        colored_client = GREEN + clientt + RESET;
-    else if (color == 2)
-        colored_client = BLUE + clientt + RESET;
-    else if (color == 3)
-        colored_client = YELLOW + clientt + RESET;
-    else if (color == 4)
-        colored_client = CYAN + clientt + RESET;
-    else if (color == 5)
-        colored_client = MAGENTA + clientt + RESET;
-    return (colored_client);
+bool valid_password(std::string nickname) {
+    std::string::iterator it = nickname.begin();
+    for (; it != nickname.end(); it++) {
+        if (!((*it >= '0' && *it <= '9') || (*it >= 'A' && *it <= 'Z') || (*it >= 'a' && *it <= 'z'))) {
+            return (false);
+        }
+    }
+    return (true);
 }

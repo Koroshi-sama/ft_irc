@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:31:40 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/23 12:00:29 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/25 09:40:17 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,6 @@
 std::vector<std::string> split(const std::string& s, char delimiter);
 std::string to_string(int n);
 std::string strtrim(std::string& str);
-std::string set_color(std::string client);
+bool valid_password(std::string nickname);
 
 #endif

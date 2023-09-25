@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 15:49:04 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/24 21:40:51 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/25 09:13:34 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,10 @@ void Command::nick(std::vector<std::string> &vc, int client_socket) {
             client->set_nickname(nickname);
             std::cout << "Nickname changed to " << client->get_nickname() << std::endl;
         } else {
-            std::string reply = "433 ERR_NICKNAMEINUSE\r\n";
-            send(client_socket, reply.c_str(), reply.size(), 0);
+            std::cout << "Nickname already exists" << std::endl;
+            // std::string reply = "433 ERR_NICKNAMEINUSE\r\n";
+            // send(client_socket, reply.c_str(), reply.size(), 0);
+            numerical_message(*_ircserv, client_socket, 433, vc[1] + " :Nickname is already in use");
         }
         // add an underscore to the nickname and then check if it exists if no set it as the new nickname if yes add an other underscore and so on
     }
@@ -66,7 +68,7 @@ void Command::nick(std::vector<std::string> &vc, int client_socket) {
             client->set_nickname(vc[1]);
             std::cout << "Old --> " << old_nickname << "New--> " << vc[1] << std::endl;
             // :hhhh!aerrazik@localhost NICK hit
-            std::string reply = "\r\n:" + old_nickname + "!" + client->get_username() + "@localhost NICK " + vc[1] + "\r\n";
+            std::string reply = "\r\n:" + old_nickname + "!" + client->get_username() + "@" + client->get_hostname() + " NICK " + vc[1] + "\r\n";
             send(client_socket, reply.c_str(), reply.size(), 0);
             std::cout << "Channel : " << client->get_channel() << std::endl;
             if (client->get_channel() != "") {

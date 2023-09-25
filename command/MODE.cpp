@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 18:30:13 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/24 15:58:56 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/25 09:11:07 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	mode_invite_only(ircserv& serv, std::string chan, int client_s,
 
 	msg = "\r\n:" + serv._clients[client_s]->get_nickname() +
 		  "!" + serv._clients[client_s]->get_username() +
-		  "@localhost MODE " + chan + " " + action + "i\r\n";
+		  "@" + serv._clients[client_s]->get_hostname() + " MODE " + chan + " " + action + "i\r\n";
 	forward_to_chan(serv, chan, msg, client_s, true);
 	std::cout << "Mode Invite Only function\n";
 }
@@ -37,10 +37,10 @@ void	mode_topic(ircserv& serv, std::string chan, int client_s,
 	bool		value = (action == '+') ? true : false;
 
 	serv._channels[chan]->set_topic_op_bool(value);
-
+	std::cout << "------->>>> " << serv._clients[client_s]->get_hostname() << std::endl;
 	msg = "\r\n:" + serv._clients[client_s]->get_nickname() +
 		  "!" + serv._clients[client_s]->get_username() +
-		  "@localhost MODE " + chan + " " + action + "t\r\n";
+		  "@" + serv._clients[client_s]->get_hostname() + " MODE " + chan + " " + action + "t\r\n";
 	forward_to_chan(serv, chan, msg, client_s, true);
 	std::cout << "Mode Topic function\n";
 }
@@ -68,7 +68,7 @@ void	mode_key(ircserv& serv, std::vector<std::string>& vc, int client_s,
 
 	msg = "\r\n:" + serv._clients[client_s]->get_nickname() +
 	  "!" + serv._clients[client_s]->get_username() +
-	  "@localhost MODE " + vc[1] + " " + action + "k " +
+	  "@" + serv._clients[client_s]->get_hostname() + " MODE " + vc[1] + " " + action + "k " +
 	  vc[3] + "\r\n";
 
 	forward_to_chan(serv, vc[1], msg, client_s, true);
@@ -129,7 +129,7 @@ void	mode_op_privileges(ircserv& serv, std::vector<std::string>& vc, int client_
 
 	msg = "\r\n:" + serv._clients[client_s]->get_nickname() +
 		  "!" + serv._clients[client_s]->get_username() +
-		  "@localhost MODE " + vc[1] + " " + action + "o " +
+		  "@" + serv._clients[client_s]->get_hostname() + " MODE " + vc[1] + " " + action + "o " +
 		  vc[3] + "\r\n";
 
 	forward_to_chan(serv, vc[1], msg, client_s, true);
@@ -173,7 +173,7 @@ void	mode_user_limit(ircserv& serv, std::vector<std::string>& vc, int client_s,
 
 	msg = "\r\n:" + serv._clients[client_s]->get_nickname() +
 		  "!" + serv._clients[client_s]->get_username() +
-		  "@localhost MODE " + vc[1] + " " + action + "l";
+		  "@" + serv._clients[client_s]->get_hostname() + " MODE " + vc[1] + " " + action + "l";
 
 	if (action == '+')
 		msg += " " + to_string(limit);

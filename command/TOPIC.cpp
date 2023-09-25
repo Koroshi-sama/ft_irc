@@ -88,7 +88,7 @@ void	Command::topic(std::vector<std::string>& vc, int client_socket) {
 											);
 	// forward topic changed command to all members in channel
 	msg = "\r\n:" + _ircserv->_clients[client_socket]->get_nickname() + "!" + 
-			_ircserv->_clients[client_socket]->get_username() + "@localhost TOPIC " +
+			_ircserv->_clients[client_socket]->get_username() + "@" + _ircserv->_clients[client_socket]->get_hostname() + " TOPIC " +
 			vc[1] + " :" +
 			_ircserv->_channels[vc[1]]->get_topic() + "\r\n";
 	std::cout << "TOPIC command: " << msg << std::endl;
