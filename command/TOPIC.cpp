@@ -23,7 +23,8 @@
 */
 
 bool	check_chan_cli(ircserv& serv, std::string chan, int client_s) {
-	if (!client_in_chan(serv, chan, socket_nick(serv, client_s), -1))
+	if (serv._channels.find(chan) != serv._channels.end() &&
+	!client_in_chan(serv, chan, socket_nick(serv, client_s), -1))
 		return (
 			numerical_message(serv, client_s, 442, chan + " :Not on channel.."),
 			false
