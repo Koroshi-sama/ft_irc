@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:38 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/25 10:11:54 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/25 08:32:46 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,5 @@ class ircserv
 };
 
 void	forward_to_chan(ircserv& serv, std::string chan, std::string msg, int client_s, bool requester_included);
-bool	client_in_chan(ircserv& serv, std::string& chan, std::string client_nick, int range);
 
 #endif

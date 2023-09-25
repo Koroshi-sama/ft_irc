@@ -15,6 +15,7 @@
 
 // #include "../includes.hpp"
 #include "../server/ircserv.hpp"
+#include "../bot/bot.hpp"
 
 #define WELCOME 1
 #define PASSWORD 485
@@ -31,6 +32,7 @@ class Command {
     
     private:
         ircserv *_ircserv;
+        bot     _bot;
         typedef void (Command::*CommandFunction)(std::vector<std::string> &, int);
         std::map<std::string, CommandFunction> _commands;
         std::map<std::string, std::vector<std::string> > _params;

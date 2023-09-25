@@ -15,25 +15,9 @@
 //		to the target user.
 //		Other channel members SHOULD NOT be notified.
 
-bool	client_in_server(ircserv& serv, std::string nickname) {
-	std::map<int, Client*>::iterator	it = serv._clients.begin();
-
-	for (; it != serv._clients.end(); it++) {
-		if (it->second->get_nickname().compare(nickname) == 0)
-			return true;
-	}
-	return false;
-}
-
 bool	check_invite_req(std::vector<std::string>& vc, int client_s, ircserv& serv) {
 	bool	is_invite_only;
 
-	if (!client_in_server(serv, vc[1]))
-		return (
-			numerical_message(serv, client_s, 401, vc[1] +\
-					" :No such nick/channel"),
-			false
-			);
 	if (serv._channels.find(vc[2]) == serv._channels.end())
 		return (
 			numerical_message(serv, client_s, 403, vc[2] + " :No such channel..."),
@@ -83,16 +67,6 @@ bool	check_invite_req(std::vector<std::string>& vc, int client_s, ircserv& serv)
 
 void	Command::invite(std::vector<std::string> &vc, int client_socket) {
 	int	target_s;
-
-	if (_ircserv->_channels.empty()) {
-		std::cout << "No channels\n";
-		return ;
-	}
-	if (vc.size() < 2) {
-		std::cout << "Not enough arguments\n";
-		return ;
-	}
-
 	if (!check_invite_req(vc, client_socket, *_ircserv)) {
 		std::cout << "error in invite request\n";
 		return ;

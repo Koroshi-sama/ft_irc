@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 15:49:04 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/25 12:28:18 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/25 09:13:34 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ void Command::nick(std::vector<std::string> &vc, int client_socket) {
                 nickname += "_";
             }
             client->set_nickname(nickname);
-            // macro that means user is registred
-            client->set_check_nick(NICKCHECKED);
             std::cout << "Nickname changed to " << client->get_nickname() << std::endl;
         } else {
             std::cout << "Nickname already exists" << std::endl;
@@ -64,8 +62,6 @@ void Command::nick(std::vector<std::string> &vc, int client_socket) {
     {
         if (client->get_nickname() == "") {
             client->set_nickname(vc[1]);
-            // macro that means user is registred
-            client->set_check_nick(NICKCHECKED);
         } else {
             //change nickname and send a reply to the concerned client
             std::string old_nickname = client->get_nickname();

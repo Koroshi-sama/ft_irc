@@ -46,7 +46,7 @@ void	forward_to_chan(ircserv& serv, std::string chan, std::string msg, int clien
 }
 
 // later check the other conditions (if any) before sending a message to a channel
-void	target_channel(int client_s, std::map<int, Client*> clients, std::string target, std::string buffer, ircserv& serv) {
+void	target_channel(int client_s, std::map<int, Client*> clients, std::string target, std::string buffer, ircserv& serv, bot bot) {
 // 	int			target_s;
 	std::string	reply;
 	std::string	msg;
@@ -57,9 +57,18 @@ void	target_channel(int client_s, std::map<int, Client*> clients, std::string ta
 	}
 	else {
 		msg = buffer.erase(0, buffer.find(':'));
-		reply = "\r\n:" + clients[client_s]->get_nickname() + " PRIVMSG " + \
+		if (msg == ":!rules\r\n") {
+			std::cout << "bot : rules function  is launched " << std::endl;
+			bot.rules(clients, target, client_s);
+		} else if (msg == ":!help\r\n") {
+			std::cout << "bot : rules function  is launched " << std::endl;
+			bot.help(clients, target, client_s);
+		} else {
+			msg = buffer.erase(0, buffer.find(':'));
+			reply = "\r\n:" + clients[client_s]->get_nickname() + " PRIVMSG " + \
 				target + " " + msg + "\r\n";
-		forward_to_chan(serv, target, reply, client_s, false);
+			forward_to_chan(serv, target, reply, client_s, false);
+		}
 	}
 }
 
@@ -74,7 +83,7 @@ void Command::privmsg(std::vector<std::string> &vc, int client_socket) {
 		std::cout << "WTF, CLIENT SOCKET NOT FOUND\n";
 	else {
 		if (vc[1][0] == '#')
-			target_channel(client_socket, this->_ircserv->_clients, vc[1], _buffer, *this->_ircserv);
+			target_channel(client_socket, this->_ircserv->_clients, vc[1], _buffer, *this->_ircserv, _bot);
 		else
 			target_client(client_socket, this->_ircserv->_clients, vc[1], _buffer);
 	}
