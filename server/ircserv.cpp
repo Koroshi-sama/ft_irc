@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:34 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/25 08:42:41 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/25 17:00:44 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,19 @@ std::string ircserv::get_password() {
 }
 
 void    ircserv::stop_server() {
+    // delete all the channels if they exists
+    std::map<std::string, Channel*>::iterator it = _channels.begin();
+    for (; it != _channels.end(); it++) {
+        delete it->second;
+    }
+    _channels.clear();
+    // delete all the clients if they exists
+    std::map<int, Client*>::iterator it2 = _clients.begin();
+    for (; it2 != _clients.end(); it2++) {
+        delete it2->second;
+    }
+    _clients.clear();
+    
     if (_socket > 0) {
         close(_socket);
     }
