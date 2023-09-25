@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 17:55:22 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/23 13:45:07 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/25 09:44:53 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void Command::user(std::vector<std::string> &vc, int client_socket) {
         send(client_socket, reply.c_str(), reply.size(), 0);
         reply = "003 RPL_CREATED\r\nThis server was created " + _ircserv->get_creation_time() + "\r\n";
         send(client_socket, reply.c_str(), reply.size(), 0);
-        reply = "004 RPL_MYINFO\r\nIRC 1.0 +i\r\n:RPL_WELCOME!" + client->get_username() + "@" + client->get_hostname() + " NICK " + client->get_nickname() + "\r\n";
+        reply = "004 RPL_MYINFO\r\nIRC 1.0 +itkol\r\n:RPL_WELCOME!" + client->get_username() + "@" + client->get_hostname() + " NICK " + client->get_nickname() + "\r\n";
         send(client_socket, reply.c_str(), reply.size(), 0);
         std::cout << "Wach tsifet" << std::endl;
         reply = "005  RPL_ISUPPORT\r\n" + client->get_nickname() + " CHANTYPES=# CHANLIMIT=#:1\r\n";

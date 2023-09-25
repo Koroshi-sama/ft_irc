@@ -15,7 +15,7 @@ void	command_message(ircserv& serv, int client_s, std::string command,
 // 						" " + command + " " + param + "\r\n";
 	std::string	msg = "\r\n:" + serv._clients[client_s]->get_nickname() + \
 						"!" + serv._clients[client_s]->get_username() + \
-						"@localhost " + command + " " + param + "\r\n";
+						"@" + serv._clients[client_s]->get_hostname() + " " + command + " " + param + "\r\n";
 	std::cout << "command_message: {" << msg << "}" << std::endl;
 
 	if (send(client_s, msg.c_str(), msg.size() + 1, 0) < 0)
@@ -27,7 +27,7 @@ void	numerical_message(ircserv& serv, int client_s, int num,
 	std::string	num_s = to_string(num);
 // 	std::string	msg = "\r\n:" + serv._clients[client_s]->get_hostname
 // + " " + command + " " + param + "\r\n";
-	std::string	msg = "\r\n:localhost " + num_s + " " + \
+	std::string	msg = "\r\n:" + serv._clients[client_s]->get_hostname() + " " + num_s + " " + \
 					serv._clients[client_s]->get_nickname() + " " + \
 					param + "\r\n";
 
