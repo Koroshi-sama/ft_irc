@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 18:30:13 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/25 09:11:07 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/25 09:53:31 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,9 +210,9 @@ void Command::mode(std::vector<std::string> &vc, int client_socket) {
 		send(client_socket, replay.c_str(), replay.size() + 1, 0);
 		return ;
 	}
-
+	if (vc.size() == 3 && vc[1] == "RPL_WELCOME") {return;}
 // ---------------------------------------------------------------
-
+	
 	if ((vc[2][0] != '+' && vc[2][0] != '-')) {
 		std::cout << "mode chars are Missing!!!!\n"; 
 		return ;
