@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 18:30:13 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/25 09:53:31 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/25 12:55:34 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,6 +202,14 @@ bool	check_mode_req(ircserv& serv, std::string chan, int client_s) {
 }
 
 void Command::mode(std::vector<std::string> &vc, int client_socket) {
+	if (_ircserv->_channels.empty()) {
+		std::cout << "No channels\n";
+		return ;
+	}
+	if (vc.size() < 2) {
+		std::cout << "Not enough arguments\n";
+		return ;
+	}
 // ----------------------------------------------------------------
 	std::cout << "Mooooooode" << vc[1] << client_socket << std::endl;
 

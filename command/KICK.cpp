@@ -65,6 +65,15 @@ void	remove_user(ircserv& serv, std::string chan, std::string user) {
 void	Command::kick(std::vector<std::string> &vc, int client_socket) {
 	std::string	reply;
 
+	if (_ircserv->_channels.empty()) {
+		std::cout << "No channels\n";
+		return ;
+	}
+	if (vc.size() < 2) {
+		std::cout << "Not enough arguments\n";
+		return ;
+	}
+
 	if (!check_kick_req(vc, client_socket, *_ircserv)) {
 		std::cout << "error in kick request\n";
 		return ;

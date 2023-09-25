@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 17:55:22 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/25 09:44:53 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/25 12:27:35 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void Command::user(std::vector<std::string> &vc, int client_socket) {
         client->set_username(vc[1]);
         client->set_hostname(vc[3]);
         client->set_realname(vc[4].substr(1) + " " + vc[5]);
+        // Macro that means user is registred
+        client->set_check_user(USERCHECKED);
         std::cout << "[" << client->get_nickname() << "]" << std::endl;
         std::string reply = "001 RPL_WELCOME\r\nWelcome to the IRC Network " + client->get_nickname() + "!"+ client->get_username() + "@" + client->get_hostname() + "\r\n";
         send(client_socket, reply.c_str(), reply.size(), 0);

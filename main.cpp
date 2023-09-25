@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:28:32 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/25 08:30:21 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/25 12:02:13 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ int main(int ac, char **av) {
                         std::cout << "Received from client " << irc.fds[i].fd << ": " << buffer << std::endl;
                         std::cout << "--------------------------------------------------------------" << std::endl;
                         /**DEBUG MSG**/
-
                         command.handle_commands(buffer, irc.fds[i].fd);
                         irc.countClients = irc.remove_client(i, irc.countClients);
                     }

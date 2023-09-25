@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:18 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/24 12:54:13 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/25 12:53:04 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,8 @@ Command::Command(ircserv *ircserv): _ircserv(ircserv) {
     _commands["USER"] = &Command::user;
     _commands["QUIT"] = &Command::quit;
     _commands["JOIN"] = &Command::join;
-    _commands["PART"] = &Command::part;
     _commands["PRIVMSG"] = &Command::privmsg;
-    _commands["NOTICE"] = &Command::notice;
     _commands["PING"] = &Command::ping;
-    _commands["PONG"] = &Command::pong;
-    _commands["WHOIS"] = &Command::whois;
     _commands["MODE"] = &Command::mode;
     _commands["KICK"] = &Command::kick;
     _commands["INVITE"] = &Command::invite;
@@ -53,7 +49,12 @@ void Command::parse_command(std::string command, int client_socket) {
             std::cout << "Command in the parsing funtcion: " << tokens[0] << std::endl;
             if (_commands.find(tokens[0]) != _commands.end()) {
                 if (tokens[0] == "PASS" || _ircserv->_clients[client_socket]->get_check_pass() == PASSWORD) {
-                    (this->*_commands[tokens[0]])(tokens, client_socket);
+                    if (tokens[0] == "PASS" || tokens[0] == "NICK" || tokens[0] == "USER" 
+                        || (_ircserv->_clients[client_socket]->get_check_nick() == NICKCHECKED 
+                        && _ircserv->_clients[client_socket]->get_check_user() == USERCHECKED)) {
+                        (this->*_commands[tokens[0]])(tokens, client_socket);
+                    }
+                    // (this->*_commands[tokens[0]])(tokens, client_socket);
                 }
             }
         }
@@ -74,14 +75,6 @@ void Command::quit(std::vector<std::string> &vc, int client_socket) {
     client->set_status(HAS_QUITED);
 }
 
-void Command::part(std::vector<std::string> &vc, int client_socket) {
-    std::cout << "Paaaaaart" << vc[1] << client_socket << std::endl;
-}
-
-void Command::notice(std::vector<std::string> &vc, int client_socket) {
-    std::cout << "Nooooooootice" << vc[1] << client_socket << std::endl;
-}
-
 void Command::ping(std::vector<std::string> &vc, int client_socket) {
     std::cout << "Piiiiiiiiing" << vc[1] << client_socket << std::endl;
     // Client *client = _ircserv->_clients[client_socket];
@@ -89,6 +82,3 @@ void Command::ping(std::vector<std::string> &vc, int client_socket) {
     send(client_socket, reply.c_str(), reply.size(), 0);
 }
 
-void Command::pong(std::vector<std::string> &vc, int client_socket) {
-    std::cout << "Pooooooong" << vc[1] << client_socket << std::endl;
-}

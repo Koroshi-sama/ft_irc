@@ -61,6 +61,14 @@ void	Command::topic(std::vector<std::string>& vc, int client_socket) {
 	std::string	msg;
 
 	// I presume that vc.size() > 1
+	if (_ircserv->_channels.empty()) {
+		std::cout << "No channels\n";
+		return ;
+	}
+	if (vc.size() < 2) {
+		std::cout << "Not enough arguments\n";
+		return ;
+	}
 	if (!check_chan_cli(*_ircserv, vc[1], client_socket)) {
 		std::cout << "Error in chan/cli (TOPIC)\n";
 		return ;
@@ -94,7 +102,4 @@ void	Command::topic(std::vector<std::string>& vc, int client_socket) {
 	std::cout << "TOPIC command: " << msg << std::endl;
 	forward_to_chan(*_ircserv, vc[1], msg, client_socket, true);
 }
-
-
-
 

@@ -83,6 +83,16 @@ bool	check_invite_req(std::vector<std::string>& vc, int client_s, ircserv& serv)
 
 void	Command::invite(std::vector<std::string> &vc, int client_socket) {
 	int	target_s;
+
+	if (_ircserv->_channels.empty()) {
+		std::cout << "No channels\n";
+		return ;
+	}
+	if (vc.size() < 2) {
+		std::cout << "Not enough arguments\n";
+		return ;
+	}
+
 	if (!check_invite_req(vc, client_socket, *_ircserv)) {
 		std::cout << "error in invite request\n";
 		return ;

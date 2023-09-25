@@ -6,7 +6,7 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 22:36:24 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/24 15:08:06 by atouba           ###   ########.fr       */
+/*   Updated: 2023/09/25 12:25:42 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,14 @@ void    Client::set_check_pass(int check_pass) {
     this->check_pass = check_pass;
 }
 
+void    Client::set_check_nick(int check_nick) {
+    _check_nick = check_nick;
+}
+
+void    Client::set_check_user(int check_user) {
+    _check_user = check_user;
+}
+
 std ::string    Client::get_nickname() const {
     return (_nickname);
 }
@@ -82,6 +90,14 @@ Client::~Client() {}
 
 std::string Client::get_channel() const {
     return (_channel);
+}
+
+int Client::get_check_nick() const {
+    return (_check_nick);
+}
+
+int Client::get_check_user() const {
+    return (_check_user);
 }
 
 std::string	Client::get_prefix() const {
