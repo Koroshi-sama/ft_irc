@@ -6,13 +6,13 @@
 /*   By: aerrazik <aerrazik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 20:06:18 by aerrazik          #+#    #+#             */
-/*   Updated: 2023/09/25 12:53:04 by aerrazik         ###   ########.fr       */
+/*   Updated: 2023/09/25 15:11:22 by aerrazik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "command.hpp"
 
-Command::Command(ircserv *ircserv): _ircserv(ircserv) {
+Command::Command(ircserv *ircserv): _ircserv(ircserv), _bot(bot("Xbot")) {
     _commands["PASS"] = &Command::pass;
     _commands["NICK"] = &Command::nick;
     _commands["USER"] = &Command::user;
